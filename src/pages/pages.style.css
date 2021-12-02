@@ -1,0 +1,19 @@
+.homepage-main {
+  height: 100vh;
+  background-image: url(../assets/img/hero.svg);
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+@media screen and (max-width: 1277px) {
+  .homepage-main {
+    background-size: 75% auto;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .homepage-main {
+    background-image: none;
+  }
+}
