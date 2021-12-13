@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import {
   FormControl,
   FormLabel,
@@ -12,13 +12,12 @@ import {
   AlertIcon,
   Text,
 } from "@chakra-ui/react";
-import axios from "axios";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link as ReactLink, useHistory } from "react-router-dom";
+import { Link as ReactLink } from "react-router-dom";
 import { useAuth } from "hooks";
-import { AuthContext, AuthContextType } from "services/AuthContext";
+import { AuthContext } from "services/AuthContext";
 
 const schema = yup.object().shape({
   email: yup
@@ -37,23 +36,10 @@ export type LoginFormInputs = {
 };
 
 const LoginForm = () => {
-  const { loginUser, authError, authLoading, verifyUser } = useAuth();
-  const history = useHistory();
-  //const [error, setError] = useState("");
-  //const { state, setState } = useContext(AuthContext);
+  const { loginUser, authError, authLoading } = useAuth();
 
-  /* const isAuthenticated = async () => {
-    if (await verifyUser()) {
-      history.replace("/sd");
-    }
-  }; */
-
-  /*  useEffect(() => {
-    isAuthenticated();
-    return () => {
-      isAuthenticated();
-    };
-  }, []); */
+  const { auth } = useContext(AuthContext);
+  console.log("Auth", auth);
 
   const { register, handleSubmit, formState } = useForm<LoginFormInputs>({
     mode: "onBlur",

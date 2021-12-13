@@ -42,8 +42,8 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, url: "/studentDashboard/" },
-  /*  { name: "Book", icon: FiTrendingUp, url: "/t/appointment" }, */
   { name: "Profile", icon: FiCompass, url: "/studentDashboard/profile" },
+  { name: "Meeting", icon: FiCompass, url: "/studentDashboard/meeting" },
 ];
 
 export default function Sidebar({ children }: { children: ReactNode }) {
@@ -212,7 +212,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{auth.userData!.name}</Text>
+                  {/* <Text fontSize="sm">{auth.userData!.name}</Text> */}
+                  <Text fontSize="sm">
+                    {auth.userData ? auth.userData.name : "Loading"}
+                  </Text>
                   <Text fontSize="xs" color="gray.600">
                     Student
                   </Text>

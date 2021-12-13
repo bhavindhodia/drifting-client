@@ -1,12 +1,4 @@
-import React, {
-  useState,
-  FC,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useCallback,
-} from "react";
-import axios from "axios";
+import React, { useState, FC, Dispatch, SetStateAction } from "react";
 enum UserRole {
   STUDENT,
   TEACHER,
@@ -41,7 +33,6 @@ export type AuthContextValue = {
 const appCtxDefaultValue: AuthContextValue = {
   auth: {
     success: false,
-    // token: "",
     redirectPath: "/login",
     /*   userData: {
       authStrategy: "",
@@ -61,39 +52,6 @@ const AuthContext = React.createContext(appCtxDefaultValue);
 const AuthProvider: FC = (props) => {
   const [auth, setAuth] = useState(appCtxDefaultValue.auth);
 
-  const verifyUser = useCallback(() => {
-    //setLoading(true);
-    const refreshTokenURL = "auth/refreshToken";
-    axios
-      .post(refreshTokenURL)
-      .then(async (response) => {
-        console.log("responseStatus", response);
-        if (response.status === 200) {
-          const redirectPath = "/studentDashboard";
-          setAuth((oldValues) => {
-            return {
-              ...oldValues,
-              success: true,
-              token: response.data.token,
-              redirectPath,
-            };
-          });
-        } else {
-          setAuth((oldValues) => {
-            return { ...oldValues, token: null };
-          });
-        }
-        // call refreshToken every 5 minutes to renew the authentication token.
-        setTimeout(verifyUser, 5 * 60 * 1000);
-      })
-      .finally(() => {
-        // setLoading(false);
-      });
-  }, [setAuth]);
-
-  useEffect(() => {
-    verifyUser();
-  }, [verifyUser]);
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       {props.children}

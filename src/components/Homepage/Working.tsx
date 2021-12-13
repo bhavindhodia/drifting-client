@@ -3,7 +3,7 @@ import { Heading, Stack, Flex } from "@chakra-ui/layout";
 import { WorkingCard } from "atoms";
 import { WorkingCardProps } from "atoms/WorkingCard";
 
-export default (props: { headingTitle: string; data: WorkingCardProps[] }) => {
+const Working = (props: { headingTitle: string; data: WorkingCardProps[] }) => {
   return (
     <Flex
       align="center"
@@ -30,3 +30,5 @@ export default (props: { headingTitle: string; data: WorkingCardProps[] }) => {
     </Flex>
   );
 };
+
+export default Working;

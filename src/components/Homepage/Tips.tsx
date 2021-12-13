@@ -23,7 +23,7 @@ const Tips = (props: { tipsData: TipsProps }) => {
         <Button
           variant="gradiant"
           size="lg"
-          bg="#38ef7d"
+          colorScheme={"success"}
           bgGradient="linear-gradient(to right, #13f066, #38ef7d);"
         >
           {props.tipsData.btnTxt}

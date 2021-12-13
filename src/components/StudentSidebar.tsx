@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "@chakra-ui/button";
 import { RiMenu2Line } from "react-icons/ri";
 import {
   Drawer,

@@ -1,18 +1,5 @@
-import {
-  Button,
-  Checkbox,
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Link,
-  Stack,
-  Image,
-  FormErrorMessage,
-} from "@chakra-ui/react";
+import { Flex, Stack, Image } from "@chakra-ui/react";
 
-import * as Yup from "yup";
 import { SignupForm } from "atoms";
 
 export default function Signup() {

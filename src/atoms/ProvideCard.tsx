@@ -1,5 +1,5 @@
-import { FC, Key } from "react";
-import { Stack, Heading, Text, Container, VStack } from "@chakra-ui/layout";
+import { FC } from "react";
+import { Stack, Heading, Text, VStack } from "@chakra-ui/layout";
 import { Image } from "@chakra-ui/image";
 
 export type ProvideCardProps = {

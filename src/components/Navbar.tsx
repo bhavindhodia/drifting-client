@@ -1,12 +1,12 @@
 import React, { useEffect, useContext } from "react";
-import { Box, Flex, Heading, Link, Button, Stack } from "@chakra-ui/react";
+import { Box, Flex, Link, Button, Stack } from "@chakra-ui/react";
 import Logo from "atoms/Logo";
 import { Link as ReactLink } from "react-router-dom";
 import { useAuth } from "hooks";
 import { AuthContext, AuthContextType } from "services/AuthContext";
 
-const Links = ["Dashboard", "Projects", "Team"];
-
+/* const Links = ["Dashboard", "Projects", "Team"];
+ */
 type NavbarType = {
   toggle: () => void;
   isOpen: boolean;

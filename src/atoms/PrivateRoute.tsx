@@ -1,68 +1,57 @@
-import { useEffect, useCallback, useContext, useState } from "react";
-import { Redirect, Route, RouteProps, useHistory } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { Redirect, Route, RouteProps } from "react-router-dom";
 import { useAuth } from "hooks";
 import { AuthContext } from "services/AuthContext";
 import { Spinner } from "@chakra-ui/spinner";
-import axios from "axios";
 
-export type ProtectedRouteProps = {
+export type PrivateRouteProps = {
   isAuthenticated?: boolean;
 } & RouteProps;
 
-export default function ProtectedRoute({
-  isAuthenticated = false,
+export default function PrivateRoute({
+  component: Component,
   ...routeProps
-}: ProtectedRouteProps) {
-  const { auth, setAuth } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+}: PrivateRouteProps) {
+  const { auth } = useContext(AuthContext);
+
+  const { verifyUser } = useAuth();
   //const { verifyUser, authLoading } = useAuth();
 
-  const verifyUser = useCallback(() => {
-    setLoading(true);
+  /* const verifyUser = useCallback(async () => {
     const refreshTokenURL = "auth/refreshToken";
-    axios
-      .post(refreshTokenURL)
-      .then(async (response) => {
-        console.log("responseStatus", response);
-        if (response.status === 200) {
-          const redirectPath = "/studentDashboard";
-          setAuth((oldValues) => {
-            return {
-              ...oldValues,
-              success: true,
-              token: response.data.token,
-              redirectPath,
-            };
-          });
-        } else {
-          setAuth((oldValues) => {
-            return { ...oldValues, token: null };
-          });
-        }
-        // call refreshToken every 5 minutes to renew the authentication token.
-        setTimeout(verifyUser, 5 * 60 * 1000);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [setAuth]);
+    axios.post(refreshTokenURL).then(async (response) => {
+      console.log("responseStatus", response);
+      if (response.status === 200) {
+        const redirectPath = "/studentDashboard";
+        setAuth((oldValues) => {
+          return {
+            ...oldValues,
+            success: true,
+            token: response.data.token,
+            redirectPath,
+          };
+        });
+      } else {
+        setAuth((oldValues) => {
+          return { ...oldValues, token: null };
+        });
+      }
+      // call refreshToken every 5 minutes to renew the authentication token.
+      setTimeout(verifyUser, 5 * 60 * 1000);
+    });
+  }, [setAuth]); */
 
-  /*  useEffect(() => {
-    verifyUser();
-  }, [verifyUser]); */
-  console.log("AUTH", auth);
-  console.log("Loading", loading);
-  /* return (
-    <>
-      <Route {...routeProps} /> 
-   
-    </>
-  ); */
+  useEffect(() => {
+    if (auth.token === undefined) {
+      console.log("Verifying User");
+      verifyUser();
+    }
+  }, [verifyUser, auth?.token]);
 
-  return auth.token === null || !auth.token ? (
+  return auth.token === null ? (
     <Redirect to="/login" />
   ) : auth.token ? (
-    <Route {...routeProps} />
+    <Route component={Component} />
   ) : (
     <Spinner />
   );

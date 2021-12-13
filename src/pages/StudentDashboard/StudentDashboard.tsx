@@ -1,21 +1,21 @@
-import { useContext, useCallback, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import Calender from "./Calender";
 import Profile from "./Profile";
 import Sidebar from "./Sidebar";
+import Meeting from "./Meeting";
 import {
   BrowserRouter as Router,
+  Redirect,
   Switch,
   Route,
-  useHistory,
 } from "react-router-dom";
 import { AuthContext } from "services/AuthContext";
-import axios from "axios";
-import { Spinner } from "@chakra-ui/spinner";
+import { useAuth } from "hooks";
 
 const StudentDashboard = () => {
-  const { auth, setAuth } = useContext(AuthContext);
-  const history = useHistory();
-  const fetchUserDetails = useCallback(() => {
+  const { auth } = useContext(AuthContext);
+  const { fetchUserDetails } = useAuth();
+  /* const fetchUserDetails = useCallback(async () => {
     axios
       .get("/auth/me", { headers: { Authorization: `Bearer ${auth.token}` } })
       .then(async (response) => {
@@ -27,8 +27,9 @@ const StudentDashboard = () => {
           });
         } else {
           if (response.status === 401) {
-            //window.location.reload();
-            history.replace(auth.redirectPath);
+            window.location.reload();
+            return;
+            //history.replace(auth.redirectPath);
           } else {
             setAuth((oldValues) => {
               return { ...oldValues, userData: null };
@@ -36,26 +37,27 @@ const StudentDashboard = () => {
           }
         }
       });
-  }, [setAuth, auth.token]);
+  }, [setAuth, auth.token]); */
 
+  console.log("auth", auth);
+  console.log("isUserData", auth.userData === undefined);
   useEffect(() => {
-    console.log("auth.userData", auth.userData);
     // fetch only when user details are not present
-    if (!auth.userData) {
+    if (auth.userData === undefined) {
+      console.log("Getting user data");
       fetchUserDetails();
     }
   }, [auth.userData, fetchUserDetails]);
 
   return auth.userData === null ? (
-    <h2> "Error Loading User"</h2>
-  ) : !auth.userData ? (
-    <Spinner />
+    <Redirect to={auth.redirectPath} />
   ) : (
     <Router>
       <Sidebar>
         <Switch>
           <Route exact path="/studentDashboard" component={Calender} />
           <Route path="/studentDashboard/profile" component={Profile} />
+          <Route path="/studentDashboard/meeting" component={Meeting} />
         </Switch>
       </Sidebar>
     </Router>

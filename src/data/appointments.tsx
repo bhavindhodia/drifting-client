@@ -1,8 +1,10 @@
-export const appointments = [
+import { AppointmentModel } from "@devexpress/dx-react-scheduler";
+
+export const appointments: Array<AppointmentModel> = [
   {
     title: "Doubt Solving",
-    startDate: new Date(2021, 10, 25, 9, 35),
-    endDate: new Date(2021, 10, 25, 11, 30),
+    startDate: new Date("2021-12-05T03:37:10.000Z"),
+    endDate: new Date("2021-12-05T04:37:10.000Z"),
     id: 0,
     location: "Room 1",
   },

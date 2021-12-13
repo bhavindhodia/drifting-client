@@ -2,28 +2,15 @@ import { useState, useContext, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "services/AuthContext";
-import api from "./api";
 import { SignupFormInputs } from "atoms/SignupForm";
 import { LoginFormInputs } from "atoms/LoginForm";
 export default function useAuth() {
   let history = useHistory();
-  //const { setUser } = useContext(UserContext);
+
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
 
-  //set user in context and push them home
-  const setUserContext = async () => {
-    const meURL = "/auth/me";
-    try {
-      const response = await axios.get(meURL, { withCredentials: true });
-      console.log("resp", response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setAuthError(error.response?.data.message);
-      }
-    }
-  };
   //register user
   const registerUser = async (data: SignupFormInputs) => {
     const { name, username, email, password } = data;
@@ -86,45 +73,53 @@ export default function useAuth() {
   };
 
   const verifyUser = useCallback(async () => {
-    console.log("Verifying User");
-    setAuthLoading(true);
     const refreshTokenURL = "auth/refreshToken";
+
     try {
       const response = await axios.post(refreshTokenURL);
       if (response.status === 200) {
         const redirectPath = response.data.role
-          .toLocalLowerCase()
+          .toLowerCase()
           .concat("Dashboard");
-        setAuth((oldValue) => {
+        setAuth((oldValues) => {
           return {
-            ...oldValue,
+            ...oldValues,
             success: true,
             token: response.data.token,
             redirectPath,
           };
         });
-        setTimeout(verifyUser, 10 * 60 * 1000);
-        return true;
       } else {
-        history.replace("/login");
-        setAuth((oldValue) => {
-          return { ...oldValue, token: null };
+        setAuth((oldValues) => {
+          return { ...oldValues, token: null };
         });
-        return false;
       }
+      setTimeout(verifyUser, 10 * 60 * 1000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log("errrr", error.response?.data);
-        history.replace("/login");
-        setAuth((oldValue) => {
-          return { ...oldValue, token: null };
-        });
-        return false;
+        setAuthError("Something went wrong. Please try again");
       }
-    } finally {
-      setAuthLoading(false);
     }
   }, [setAuth]);
+
+  const fetchUserDetails = useCallback(async () => {
+    const userDataUrl = "/auth/me";
+    try {
+      const response = await axios.get(userDataUrl, {
+        headers: { Authorization: `Bearer ${auth.token}` },
+      });
+
+      response.status === 200
+        ? setAuth((oldValues) => {
+            return { ...oldValues, userData: response.data?.user };
+          })
+        : setAuth((oldValues) => {
+            return { ...oldValues, userData: null };
+          });
+    } catch (error) {
+      setAuthError("Something went wrong. Please try again");
+    }
+  }, [setAuth, auth.token]);
 
   const logoutUser = async () => {
     const logoutURL = "auth/logout";
@@ -153,5 +148,6 @@ export default function useAuth() {
     authError,
     getUserData,
     authLoading,
+    fetchUserDetails,
   };
 }

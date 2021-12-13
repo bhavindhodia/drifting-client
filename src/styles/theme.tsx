@@ -19,6 +19,7 @@ export default extendTheme({
     highlight: "#00C9A7",
     warning: "#FFC75F",
     danger: "#C34A36",
+    success: "#38ef7d",
   },
   fonts: {
     ...chakraTheme.fonts,

@@ -1,5 +1,3 @@
-import { Heading } from "@chakra-ui/layout";
-import React from "react";
 import Sidebar from "./SideBar";
 import BasicStatistics from "./Stats";
 import Profile from "./Profile";
