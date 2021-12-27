@@ -1,6 +1,6 @@
 import { FC } from "react";
 import globalData from "data/globalData.json";
-import { Heading, HeadingProps } from "@chakra-ui/layout";
+import { Heading, HeadingProps, Box } from "@chakra-ui/layout";
 type Props = {
   titleProps?: HeadingProps;
   iconWidth?: number;
@@ -8,7 +8,7 @@ type Props = {
 };
 const Logo: FC<Props> = (props) => {
   return (
-    <>
+    <Box display={"flex"} justifyContent={"space-around"} alignItems={"center"}>
       <svg
         width={props.iconWidth ? props.iconWidth : 50}
         height={props.iconHeight ? props.iconHeight : 50}
@@ -62,7 +62,7 @@ const Logo: FC<Props> = (props) => {
       <Heading size="lg" fontWeight="bold" {...props.titleProps}>
         {globalData.appName}
       </Heading>
-    </>
+    </Box>
   );
 };
 

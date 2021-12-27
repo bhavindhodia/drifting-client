@@ -18,15 +18,17 @@ import {
 import axios from "axios";
 import { AuthProvider } from "services/AuthContext";
 import Auth from "pages/Auth";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   axios.defaults.baseURL = "http://localhost:5000/v1/";
   axios.defaults.withCredentials = true;
-  //axios.defaults.headers = { "content-type": "application/json" };
 
   return (
     <Router>
       <ChakraProvider theme={theme}>
         <AuthProvider>
+          <ToastContainer />
           <Switch>
             <Route path="/" exact component={Homepage} />
             <Route path="/aboutus" component={AboutUs} />

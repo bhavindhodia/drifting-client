@@ -3,6 +3,7 @@ import Calender from "./Calender";
 import Profile from "./Profile";
 import Sidebar from "./Sidebar";
 import Meeting from "./Meeting";
+import Checkout from "./Checkout";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -11,36 +12,21 @@ import {
 } from "react-router-dom";
 import { AuthContext } from "services/AuthContext";
 import { useAuth } from "hooks";
+import { AppProvider } from "hooks/appointmentContext";
+import axios from "axios";
+import PaymentResult from "./PaymentResult";
 
 const StudentDashboard = () => {
   const { auth } = useContext(AuthContext);
+
+  if (auth.token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
+  }
+
   const { fetchUserDetails } = useAuth();
-  /* const fetchUserDetails = useCallback(async () => {
-    axios
-      .get("/auth/me", { headers: { Authorization: `Bearer ${auth.token}` } })
-      .then(async (response) => {
-        if (response.status === 200) {
-          console.log("userData", response.data);
 
-          setAuth((oldValues) => {
-            return { ...oldValues, userData: response.data?.user };
-          });
-        } else {
-          if (response.status === 401) {
-            window.location.reload();
-            return;
-            //history.replace(auth.redirectPath);
-          } else {
-            setAuth((oldValues) => {
-              return { ...oldValues, userData: null };
-            });
-          }
-        }
-      });
-  }, [setAuth, auth.token]); */
-
-  console.log("auth", auth);
-  console.log("isUserData", auth.userData === undefined);
+  /*  console.log("auth", auth);
+  console.log("isUserDataAvaliable", auth.userData !== undefined); */
   useEffect(() => {
     // fetch only when user details are not present
     if (auth.userData === undefined) {
@@ -54,11 +40,18 @@ const StudentDashboard = () => {
   ) : (
     <Router>
       <Sidebar>
-        <Switch>
-          <Route exact path="/studentDashboard" component={Calender} />
-          <Route path="/studentDashboard/profile" component={Profile} />
-          <Route path="/studentDashboard/meeting" component={Meeting} />
-        </Switch>
+        <AppProvider>
+          <Switch>
+            <Route exact path="/studentDashboard" component={Calender} />
+            <Route path="/studentDashboard/profile" component={Profile} />
+            <Route path="/studentDashboard/meeting" component={Meeting} />
+            <Route path="/studentDashboard/checkout" component={Checkout} />
+            <Route
+              path="/studentDashboard/payment-status"
+              component={PaymentResult}
+            />
+          </Switch>
+        </AppProvider>
       </Sidebar>
     </Router>
   );
