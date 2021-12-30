@@ -3,6 +3,7 @@ import { Redirect, Route, RouteProps } from "react-router-dom";
 import { useAuth } from "hooks";
 import { AuthContext } from "services/AuthContext";
 import { Spinner } from "@chakra-ui/spinner";
+import { Center } from "@chakra-ui/layout";
 
 export type PrivateRouteProps = {
   isAuthenticated?: boolean;
@@ -53,6 +54,8 @@ export default function PrivateRoute({
   ) : auth.token ? (
     <Route component={Component} />
   ) : (
-    <Spinner />
+    <Center py={6} minH={"100vh"}>
+      <Spinner />
+    </Center>
   );
 }

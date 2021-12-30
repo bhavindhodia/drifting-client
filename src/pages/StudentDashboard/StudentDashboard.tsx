@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import { AuthContext } from "services/AuthContext";
 import { useAuth } from "hooks";
-import { AppProvider } from "hooks/appointmentContext";
+
 import axios from "axios";
 import PaymentResult from "./PaymentResult";
 
@@ -25,12 +25,10 @@ const StudentDashboard = () => {
 
   const { fetchUserDetails } = useAuth();
 
-  /*  console.log("auth", auth);
-  console.log("isUserDataAvaliable", auth.userData !== undefined); */
   useEffect(() => {
     // fetch only when user details are not present
     if (auth.userData === undefined) {
-      console.log("Getting user data");
+      console.log("Getting Students data");
       fetchUserDetails();
     }
   }, [auth.userData, fetchUserDetails]);
@@ -40,18 +38,16 @@ const StudentDashboard = () => {
   ) : (
     <Router>
       <Sidebar>
-        <AppProvider>
-          <Switch>
-            <Route exact path="/studentDashboard" component={Calender} />
-            <Route path="/studentDashboard/profile" component={Profile} />
-            <Route path="/studentDashboard/meeting" component={Meeting} />
-            <Route path="/studentDashboard/checkout" component={Checkout} />
-            <Route
-              path="/studentDashboard/payment-status"
-              component={PaymentResult}
-            />
-          </Switch>
-        </AppProvider>
+        <Switch>
+          <Route exact path="/studentDashboard" component={Calender} />
+          <Route path="/studentDashboard/profile" component={Profile} />
+          <Route path="/studentDashboard/meeting" component={Meeting} />
+          <Route path="/studentDashboard/checkout" component={Checkout} />
+          <Route
+            path="/studentDashboard/payment-status"
+            component={PaymentResult}
+          />
+        </Switch>
       </Sidebar>
     </Router>
   );

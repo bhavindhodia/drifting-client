@@ -1,39 +1,42 @@
-import { Button } from "@chakra-ui/button";
+import { useEffect, useState } from "react";
+import { SimpleGrid, Spacer } from "@chakra-ui/layout";
 
-const meetingConfig = {
-  apiKey: "a9aS3eawQBi9h-VJ99gsCw",
-  meetingNumber: 12328942,
-  userName: "user1",
-  password: "tmpArgs.pwd",
-  leaveUrl: "/",
-  role: 0,
-  userEmail: "bhavindhodia13@gmail.com",
-  lang: "en",
-  signature: "",
-  webEndpoint: "zoom.us",
-};
-
-interface generateSignatureProps {
-  apiKey: string;
-  apiSecret: string;
-  meetingNumber: string;
-  role: string | number;
-  success?: Function;
-  error?: Function;
-  userName: string;
-  password: string;
-  leaveUrl: string;
-  userEmail: string;
-  lang: string;
-  signature: string;
-  webEndpoint: string;
-}
+import { MeetCard } from "atoms";
+import axios from "axios";
+import { MeetCardType } from "atoms/MeetCard";
 
 const Meeting = () => {
+  useEffect(() => {
+    getMeets();
+  }, []);
+
+  const [meetData, setMeetData] = useState<MeetCardType[]>([]);
+
+  const getMeets = async () => {
+    const getMeetUrl = "appointment/meetings";
+    try {
+      const response = await axios.get(getMeetUrl);
+      let appointmentData = response.data;
+
+      //      console.log("appointmentData", appointmentData);
+      setMeetData(appointmentData);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  console.log("meetData", meetData);
+
   return (
-    <div>
-      <Button>Meet</Button>
-    </div>
+    <SimpleGrid minChildWidth="320px" spacing="1.5rem">
+      {meetData.map((item: MeetCardType, key: number) => {
+        return (
+          <>
+            <MeetCard key={key} {...item} />
+            <Spacer />
+          </>
+        );
+      })}
+    </SimpleGrid>
   );
 };
 

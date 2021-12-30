@@ -17,11 +17,13 @@ import { toast } from "react-toastify";
 import { AppContext } from "hooks/appointmentContext";
 import axios from "axios";
 import { AppointmentType } from "hooks/appointmentReducer";
+import { useHistory } from "react-router-dom";
 
 const toastID = "Payment Page";
 const CheckoutForm: FC = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const history = useHistory();
 
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -95,8 +97,16 @@ const CheckoutForm: FC = () => {
         return_url: "http://localhost:3000/studentDashboard/payment-status",
       },
     });
+    console.log("errir", error);
     if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error?.message || "Yoo Error Here");
+      // setMessage(error?.message || "Yoo Error Here");
+      history.push(
+        `/studentDashboard/payment-status?payment_intent=${error.payment_intent?.id}&payment_intent_client_secret=${error.payment_intent?.client_secret}&redirect_status=${error.type}`,
+        {
+          resultType: "error",
+          title: error?.message,
+        }
+      );
     } else {
       setMessage("An unexpected error occured.");
     }

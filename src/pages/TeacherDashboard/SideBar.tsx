@@ -42,11 +42,15 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, url: "/t/" },
-  { name: "Appointment", icon: FiTrendingUp, url: "/t/appointment" },
-  { name: "Profile", icon: FiCompass, url: "/t/profile" },
-  { name: "Feedback", icon: FiStar, url: "/t/feedback" },
-  { name: "Settings", icon: FiSettings, url: "/t/appointment" },
+  { name: "Home", icon: FiHome, url: "/teacherDashboard/" },
+  {
+    name: "Appointment",
+    icon: FiTrendingUp,
+    url: "/teacherDashboard/appointment",
+  },
+  { name: "Profile", icon: FiCompass, url: "/teacherDashboard/profile" },
+  { name: "Feedback", icon: FiStar, url: "/teacherDashboard/feedback" },
+  { name: "Settings", icon: FiSettings, url: "/teacherDashboard/appointment" },
 ];
 
 export default function Sidebar({ children }: { children: ReactNode }) {

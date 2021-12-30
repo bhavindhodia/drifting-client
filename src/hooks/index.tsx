@@ -1,4 +1,8 @@
 import useAuth from "./useAuth";
 import useFindUser from "./useFindUser";
 
-export { useAuth, useFindUser };
+import {
+  useGetAppointment,
+  usePostAppointment,
+} from "./useTeachersAppointment";
+export { useAuth, useFindUser, useGetAppointment, usePostAppointment };

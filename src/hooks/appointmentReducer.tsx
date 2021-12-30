@@ -25,7 +25,7 @@ export type AppointmentType = {
   allDay: boolean;
   startDate: Date;
   endDate: Date;
-  readInly: boolean;
+  readOnly: boolean;
 };
 
 type AppointmentPayload = {
