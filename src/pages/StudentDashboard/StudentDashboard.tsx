@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import Calender from "./Calender";
+import StudentAppointment from "./StudentAppointments";
 import Profile from "./Profile";
 import Sidebar from "./Sidebar";
 import Meeting from "./Meeting";
@@ -12,10 +12,17 @@ import {
 } from "react-router-dom";
 import { AuthContext } from "services/AuthContext";
 import { useAuth } from "hooks";
-
+import { QueryClient, QueryClientProvider } from "react-query";
 import axios from "axios";
 import PaymentResult from "./PaymentResult";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 const StudentDashboard = () => {
   const { auth } = useContext(AuthContext);
 
@@ -37,18 +44,24 @@ const StudentDashboard = () => {
     <Redirect to={auth.redirectPath} />
   ) : (
     <Router>
-      <Sidebar>
-        <Switch>
-          <Route exact path="/studentDashboard" component={Calender} />
-          <Route path="/studentDashboard/profile" component={Profile} />
-          <Route path="/studentDashboard/meeting" component={Meeting} />
-          <Route path="/studentDashboard/checkout" component={Checkout} />
-          <Route
-            path="/studentDashboard/payment-status"
-            component={PaymentResult}
-          />
-        </Switch>
-      </Sidebar>
+      <QueryClientProvider client={queryClient}>
+        <Sidebar>
+          <Switch>
+            <Route
+              exact
+              path="/studentDashboard"
+              component={StudentAppointment}
+            />
+            <Route path="/studentDashboard/profile" component={Profile} />
+            <Route path="/studentDashboard/meeting" component={Meeting} />
+            <Route path="/studentDashboard/checkout" component={Checkout} />
+            <Route
+              path="/studentDashboard/payment-status"
+              component={PaymentResult}
+            />
+          </Switch>
+        </Sidebar>
+      </QueryClientProvider>
     </Router>
   );
 };

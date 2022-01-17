@@ -1,25 +1,40 @@
-import React, { useEffect, useState, FC, useContext } from "react";
+import React, { useState, FC, useContext } from "react";
 import {
   PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import {
-  PaymentIntentResult,
-  StripeError,
-  PaymentIntent,
-} from "@stripe/stripe-js";
+import { StripeError } from "@stripe/stripe-js";
 import { Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import { Spinner } from "@chakra-ui/spinner";
 import { GiWallet } from "react-icons/gi";
 import { toast } from "react-toastify";
 import { AppContext } from "hooks/appointmentContext";
-import axios from "axios";
-import { AppointmentType } from "hooks/appointmentReducer";
 import { useHistory } from "react-router-dom";
-
+import { AuthContext } from "services";
 const toastID = "Payment Page";
+
+const CARD_OPTIONS = {
+  iconStyle: "solid",
+  style: {
+    base: {
+      iconColor: "#c4f0ff",
+      color: "#fff",
+      fontWeight: 500,
+      fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
+      fontSize: "16px",
+      fontSmoothing: "antialiased",
+      ":-webkit-autofill": { color: "#fce883" },
+      "::placeholder": { color: "#87bbfd" },
+    },
+    invalid: {
+      iconColor: "#ffc7ee",
+      color: "#ffc7ee",
+    },
+  },
+};
+
 const CheckoutForm: FC = () => {
   const stripe = useStripe();
   const elements = useElements();
@@ -28,59 +43,7 @@ const CheckoutForm: FC = () => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useContext(AppContext);
-
-  const paymentStatus = async (clientSecret: string) => {
-    if (!stripe) {
-      return;
-    }
-    const createAppointment = async (
-      appointmentData: AppointmentType,
-      paymentIntent: PaymentIntent
-    ) => {
-      const createAppointmentUrl = "/appointment";
-      try {
-        const createdAppointment = await axios.post(createAppointmentUrl, {
-          appointmentData,
-          paymentIntent,
-        });
-        console.log("created", createdAppointment);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    const {
-      paymentIntent,
-    }: PaymentIntentResult = await stripe.retrievePaymentIntent(clientSecret);
-    switch (paymentIntent?.status) {
-      case "succeeded":
-        const appointmentData: AppointmentType =
-          JSON.parse(localStorage.getItem("newAppointment") || "") || "";
-        createAppointment(appointmentData, paymentIntent);
-        setMessage("Payment succeeded!");
-        break;
-      case "processing":
-        setMessage("Your payment is processing.");
-        break;
-      case "requires_payment_method":
-        setMessage("Your payment was not successful, please try again.");
-        break;
-      default:
-        setMessage("Something went wrong.");
-        break;
-    }
-  };
-
-  useEffect(() => {
-    console.log("state", state.appointments[0]);
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-
-    if (!clientSecret) {
-      return;
-    }
-    paymentStatus(clientSecret);
-  }, [stripe]);
+  const { auth } = useContext(AuthContext);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();

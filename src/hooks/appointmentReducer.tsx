@@ -21,6 +21,8 @@ export type AppointmentType = {
   id?: number;
   title: string;
   teacherID: string;
+  studentID: [];
+  paymentID: [];
   notes: string;
   allDay: boolean;
   startDate: Date;

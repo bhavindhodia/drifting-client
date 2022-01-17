@@ -1,4 +1,4 @@
-import { useState, ComponentType } from "react";
+import { useState, ComponentType, useContext } from "react";
 import {
   ViewState,
   EditingState,
@@ -21,60 +21,60 @@ import {
   AppointmentForm,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import {
-  useGetAppointment,
-  usePostAppointment,
-  useUpdateAppointment,
-  useDeleteAppointment,
-} from "hooks";
+import { useGetAppointment, usePostAppointment } from "hooks";
 import { Spinner } from "@chakra-ui/spinner";
 import { Center } from "@chakra-ui/layout";
-import { Progress } from "@chakra-ui/progress";
+import { AuthContext } from "services/AuthContext";
 import CustomBasicLayout from "./CustomBasicLayout";
-import CustomCommandLayout from "./CustomCommandLayout";
-import { useToast } from "@chakra-ui/toast";
+import AppointmentLoading from "./AppointmentLoading";
+
 type CurrentStateType = {
   viewName: string;
   currentDate: Date;
 };
 
-const AppointmentLoading: ComponentType<Toolbar.RootProps> = ({
-  children,
+const TimeTableCell: ComponentType<WeekView.TimeTableCellProps> = ({
   ...restProps
 }) => {
-  return (
-    <div style={{ position: "relative" }}>
-      <Toolbar.Root {...restProps}>{children}</Toolbar.Root>
-      <Progress
-        size={"sm"}
-        isIndeterminate
-        style={{ position: "absolute", width: "100%", bottom: 0, left: 0 }}
-      />
-    </div>
-  );
+  return <WeekView.TimeTableCell {...restProps} onDoubleClick={undefined} />;
 };
-const CustomAppointment: ComponentType<Appointments.AppointmentProps> = ({
+
+const Appointment: ComponentType<Appointments.AppointmentProps> = ({
   children,
   data,
   ...restProps
-}) => (
-  <Appointments.Appointment
-    {...restProps}
-    data={data}
-    style={{
-      backgroundColor: data?.readOnly ? "#d5d5d5" : "#01476B",
-      borderRadius: "2px",
-    }}
-  >
-    {children}
-  </Appointments.Appointment>
-);
+}) => {
+  const { auth } = useContext(AuthContext);
+  const readOnly = data?.studentID.find(
+    (item: { name: string; _id: string }) => item._id === auth.userData?.id
+  );
+  console.log("readOnly", readOnly);
+  let appointmentColor = "#01476B";
+  if (data?.readOnly) {
+    appointmentColor = "#d5d5d5";
+  }
+  if (readOnly !== undefined) {
+    appointmentColor = "#34BE82";
+  }
+  return (
+    <Appointments.Appointment
+      {...restProps}
+      data={data}
+      style={{
+        backgroundColor: appointmentColor,
+        borderRadius: "2px",
+      }}
+    >
+      {children}
+    </Appointments.Appointment>
+  );
+};
+
 const theme = createTheme({
   typography: {
     fontFamily: "Poppins",
   },
 });
-const toastId = "toastID";
 const TeacherAppointments = () => {
   const [currentState, setCurrentState] = useState<CurrentStateType>({
     viewName: "Week",
@@ -84,11 +84,7 @@ const TeacherAppointments = () => {
     currentState.viewName,
     currentState.currentDate
   );
-
   const createAppointment = usePostAppointment();
-  const updateAppointment = useUpdateAppointment();
-  const deleteAppointment = useDeleteAppointment();
-  const toast = useToast();
 
   const commitChanges = async ({ added, changed, deleted }: ChangeSet) => {
     if (added) {
@@ -101,26 +97,19 @@ const TeacherAppointments = () => {
       createAppointment.mutate(appointmentData);
     }
     if (changed) {
-      const appointmentID = Object.keys(changed).toString();
-      const payload = changed[appointmentID];
-
-      console.log("UPDATED", { id: appointmentID, ...payload });
-
-      updateAppointment.mutate({ id: appointmentID, ...payload });
+      console.log("UPDATED");
     }
     if (deleted) {
       console.log("deleted", deleted);
-      deleteAppointment.mutate(deleted);
     }
   };
 
   const onDateChange: (currentDate: Date) => void = (currentDate) => {
-    /* console.log("currentDate", currentDate); */
+    console.log("currentDate", currentDate);
     setCurrentState((oldData) => ({ viewName: oldData.viewName, currentDate }));
-    //setCurrentState({ viewName: "WEEK", currentDate });
   };
   const setCurrentViewName: (viewName: string) => void = (viewName) => {
-    /* console.log("viewName", viewName); */
+    console.log("viewName", viewName);
     setCurrentState((oldData) => ({
       viewName,
       currentDate: oldData.currentDate,
@@ -140,30 +129,28 @@ const TeacherAppointments = () => {
           onCurrentViewNameChange={setCurrentViewName}
         />
         <MonthView />
-        <WeekView startDayHour={8} endDayHour={13} />
+        <WeekView
+          startDayHour={8}
+          endDayHour={13}
+          timeTableCellComponent={TimeTableCell}
+        />
         <DayView startDayHour={8} endDayHour={13} />
         <EditingState onCommitChanges={commitChanges} />
         <IntegratedEditing />
         <Toolbar
-          {...(isFetching || deleteAppointment.isLoading
-            ? { rootComponent: AppointmentLoading }
-            : null)}
+          {...(isFetching ? { rootComponent: AppointmentLoading } : null)}
         />
         <ViewSwitcher />
         <DateNavigator />
         <TodayButton />
-        <Appointments appointmentComponent={CustomAppointment} />
+        <Appointments appointmentComponent={Appointment} />
 
-        <AppointmentTooltip
-          /*    contentComponent={Content}
-        headerComponent={Header} */
-          showOpenButton
-          showDeleteButton
-        />
+        <AppointmentTooltip showOpenButton />
         <ConfirmationDialog />
         <AppointmentForm
+          readOnly
           basicLayoutComponent={CustomBasicLayout}
-          commandLayoutComponent={CustomCommandLayout}
+
           /* basicLayoutComponent={BasicLayout}
         commandLayoutComponent={CommandLayout} */
         />

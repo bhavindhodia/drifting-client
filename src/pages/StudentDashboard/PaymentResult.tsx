@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 import {
   Box,
   Heading,
@@ -16,7 +16,7 @@ import { Link as ReactLink, useLocation } from "react-router-dom";
 import { PaymentIntent } from "@stripe/stripe-js";
 import { AppointmentType } from "hooks/appointmentReducer";
 import axios from "axios";
-
+import { AuthContext } from "services";
 export enum PaymentResultType {
   SUCCESS = "success",
   ERROR = "error",
@@ -29,8 +29,13 @@ type PaymentResultProps = {
   resultType: PaymentResultType;
 };
 
+type LocationState = {
+  title: string;
+  retultType: string;
+};
+
 const PaymentResult: FC<PaymentResultProps> = () => {
-  const { state } = useLocation();
+  const { auth } = useContext(AuthContext);
   const payment_intent = new URLSearchParams(window.location.search).get(
     "payment_intent"
   );
@@ -40,24 +45,49 @@ const PaymentResult: FC<PaymentResultProps> = () => {
 
   const [data, setData] = useState<PaymentResultProps>();
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    checkPaymentStatus();
-  }, []);
+  const { state } = useLocation<LocationState>();
 
-  if (redirect_status !== "succeeded") {
-  }
+  console.log("auth", auth);
+  useEffect(() => {
+    if (redirect_status !== "succeeded" || state !== undefined) {
+      setData({
+        title: "Payment Failed",
+        description: state?.title,
+        resultType: PaymentResultType.ERROR,
+      });
+    } else if (auth.userData !== undefined) {
+      checkPaymentStatus();
+    }
+  }, [auth.userData]);
+
   const createAppointment = async (
     appointmentData: AppointmentType,
     paymentIntent: PaymentIntent
   ) => {
-    const createAppointmentUrl = "/appointment";
+    const studentUpdate = "/appointment/studentUpdate";
+    console.log("auth?.userData?.id,", auth?.userData?.id);
     try {
-      const createdAppointment = await axios.post(createAppointmentUrl, {
+      const updatedData = await axios.post(studentUpdate, {
         appointmentData,
         paymentIntent,
+        studentID: auth?.userData?.id.toString(),
       });
+      console.log("updatedData", updatedData);
     } catch (error) {
-      console.log("error", error);
+      if (axios.isAxiosError(error)) {
+        console.log("error", error?.response?.data);
+        setData({
+          title: "Payment Failed",
+          description: error?.response?.data.message,
+          resultType: PaymentResultType.ERROR,
+        });
+      } else {
+        setData({
+          title: "Payment Failed",
+          description: "Error occured. Please try again",
+          resultType: PaymentResultType.ERROR,
+        });
+      }
     }
   };
 
@@ -124,7 +154,7 @@ const PaymentResult: FC<PaymentResultProps> = () => {
     }
   };
 
-  return loading ? (
+  return loading || !auth.userData ? (
     <Center>
       <Spinner />
     </Center>

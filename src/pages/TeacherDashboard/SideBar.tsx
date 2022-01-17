@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import {
   IconButton,
   Avatar,
@@ -35,6 +35,9 @@ import {
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { Link as ReactLink } from "react-router-dom";
+import { AuthContext } from "services/AuthContext";
+import { useAuth } from "hooks";
+import { Logo } from "atoms";
 
 interface LinkItemProps {
   name: string;
@@ -49,7 +52,7 @@ const LinkItems: Array<LinkItemProps> = [
     url: "/teacherDashboard/appointment",
   },
   { name: "Profile", icon: FiCompass, url: "/teacherDashboard/profile" },
-  { name: "Feedback", icon: FiStar, url: "/teacherDashboard/feedback" },
+  { name: "Payments", icon: FiStar, url: "/teacherDashboard/payments" },
   { name: "Settings", icon: FiSettings, url: "/teacherDashboard/appointment" },
 ];
 
@@ -105,7 +108,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+          <Logo />
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -159,6 +162,7 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const { auth } = useContext(AuthContext);
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -185,7 +189,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         fontFamily="monospace"
         fontWeight="bold"
       >
-        Logo
+        <Logo />
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
@@ -215,7 +219,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">
+                    {" "}
+                    {auth.userData ? auth.userData.name : "Loading"}
+                  </Text>
                   <Text fontSize="xs" color="gray.600">
                     Teacher
                   </Text>

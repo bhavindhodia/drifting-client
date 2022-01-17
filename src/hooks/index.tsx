@@ -4,5 +4,18 @@ import useFindUser from "./useFindUser";
 import {
   useGetAppointment,
   usePostAppointment,
+  useGetStudentList,
+  useUpdateAppointment,
+  useDeleteAppointment,
 } from "./useTeachersAppointment";
-export { useAuth, useFindUser, useGetAppointment, usePostAppointment };
+import { useGetPayments } from "./usePayments";
+export {
+  useAuth,
+  useFindUser,
+  useGetAppointment,
+  usePostAppointment,
+  useGetStudentList,
+  useUpdateAppointment,
+  useDeleteAppointment,
+};
+export { useGetPayments };

@@ -1,14 +1,25 @@
 import { FC } from "react";
 import globalData from "data/globalData.json";
 import { Heading, HeadingProps, Box } from "@chakra-ui/layout";
+/* import { Link } from "@chakra-ui/react"; */
+import { Link, useHistory } from "react-router-dom";
 type Props = {
   titleProps?: HeadingProps;
   iconWidth?: number;
   iconHeight?: number;
 };
 const Logo: FC<Props> = (props) => {
+  const history = useHistory();
+  const redirectHome = () => {
+    history.push("/home");
+  };
   return (
-    <Box display={"flex"} justifyContent={"space-around"} alignItems={"center"}>
+    <Box
+      display={"flex"}
+      justifyContent={"space-around"}
+      alignItems={"center"}
+      onClick={redirectHome}
+    >
       <svg
         width={props.iconWidth ? props.iconWidth : 50}
         height={props.iconHeight ? props.iconHeight : 50}
