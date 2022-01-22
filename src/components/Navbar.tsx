@@ -16,13 +16,13 @@ const NavBar: React.FC<{}> = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
   //const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
-  const { verifyUser } = useAuth();
+  /*   const { verifyUser } = useAuth();
   const { auth } = useContext(AuthContext);
   useEffect(() => {
     verifyUser();
-  }, [verifyUser]);
+  }, [verifyUser]); */
 
-  console.log("Menu User", auth);
+  /*  console.log("Menu User", auth); */
   const toggle = () => setIsOpen(!isOpen);
 
   return (
@@ -31,7 +31,8 @@ const NavBar: React.FC<{}> = (props) => {
         <Logo />
       </Box>
       <MenuToggle toggle={toggle} isOpen={isOpen} />
-      <MenuLinks isOpen={isOpen} authState={auth} />
+      <MenuLinks isOpen={isOpen} />
+      {/* <MenuLinks isOpen={isOpen} authState={auth} /> */}
     </NavBarContainer>
   );
 };
@@ -85,10 +86,10 @@ const MenuItem = ({
 
 const MenuLinks = ({
   isOpen,
-  authState,
-}: {
+}: //authState,
+{
   isOpen: boolean;
-  authState: AuthContextType;
+  //authState: AuthContextType;
 }) => {
   return (
     <Box
@@ -105,7 +106,8 @@ const MenuLinks = ({
         <MenuItem url="/">Home</MenuItem>
         <MenuItem url="/aboutus">About Us</MenuItem>
         <MenuItem url="/blog">Blog </MenuItem>
-        <MenuItem url={authState.redirectPath} isLast>
+        {/*   <MenuItem url={authState.redirectPath} isLast> */}
+        <MenuItem url="/redirectPath" isLast>
           <Button
             size="sm"
             rounded="md"
@@ -115,7 +117,8 @@ const MenuLinks = ({
               bg: ["primary.100", "primary.100", "primary.600", "primary.600"],
             }}
           >
-            {authState.success ? "Dashboard" : "Log In"}
+            {/* {authState.success ? "Dashboard" : "Log In"} */}
+            Dashboard
           </Button>
         </MenuItem>
       </Stack>

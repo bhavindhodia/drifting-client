@@ -16,9 +16,10 @@ export type UserDataType = {
 
 export type AuthContextType = {
   success: boolean;
-  token?: string | null;
+  token: string | null;
   userData?: UserDataType | null;
-  role?: UserRole;
+  role: UserRole;
+  errorMessage?: string;
   redirectPath: string;
 };
 
@@ -34,6 +35,8 @@ const appCtxDefaultValue: AuthContextValue = {
   auth: {
     success: false,
     redirectPath: "/login",
+    role: UserRole.STUDENT,
+    token: "",
     /*   userData: {
       authStrategy: "",
       email: "",

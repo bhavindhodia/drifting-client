@@ -6,7 +6,10 @@ import Provide from "./Homepage/Provide";
 import Booking from "./Homepage/Booking";
 import Tips from "./Homepage/Tips";
 import Footer from "./Footer";
-import StudentSidebar from "./StudentSidebar";
+
+import PublicRoute from "./PublicRoute";
+import PrivateRoute from "./PrivateRoute";
+import ProtectedRoutes from "./ProtectedRoutes";
 export {
   Navbar,
   LandingLayout,
@@ -16,5 +19,7 @@ export {
   Tips,
   Booking,
   Footer,
-  StudentSidebar,
+  PublicRoute,
+  PrivateRoute,
+  ProtectedRoutes,
 };

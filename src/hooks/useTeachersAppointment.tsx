@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import axios from "axios";
+import { axiosClient } from "services";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
 import { AuthContext } from "services/AuthContext";
 import { useToast, UseToastOptions, ToastId } from "@chakra-ui/react";
@@ -33,7 +34,7 @@ const showToast = (
 /* TEACHER : Get Appointment */
 const getAppointments = async (viewName?: string, currentDate?: Date) => {
   const getUrl = `/appointment?viewName=${viewName}&currentDate=${currentDate}`;
-  const { data } = await axios.get(getUrl);
+  const { data } = await axiosClient.get(getUrl);
 
   /* console.log("data", data); */
   return data;
@@ -52,7 +53,7 @@ const useGetAppointment = (viewName?: string, currentDate?: Date) => {
 /* TEACHER : Create Appointment */
 
 const createAppointments = async (newData: AppointmentModel) => {
-  const { data } = await axios.post(appointmentUrl, {
+  const { data } = await axiosClient.post(appointmentUrl, {
     appointmentData: newData,
   });
   /*  console.log("data", data); */
@@ -73,7 +74,7 @@ const usePostAppointment = () => {
 /* TEACHER : Get Student List */
 const getStudentList = async () => {
   const getUrl = `/appointment/getUserByRole/student`;
-  let { data } = await axios.get(getUrl);
+  let { data } = await axiosClient.get(getUrl);
   if (data?.studentList !== undefined) {
     data = data?.studentList.map(
       (item: { id: string; name: string }, key: string) => {
@@ -101,7 +102,7 @@ const updateAppointments = async (
         [key: string]: any;
       }
 ) => {
-  const { data } = await axios.patch(`/appointment/${appointmentID}`, {
+  const { data } = await axiosClient.patch(`/appointment/${appointmentID}`, {
     appointmentData: newData,
   });
   return data;
@@ -130,7 +131,7 @@ const useUpdateAppointment = () => {
 /* TEACHER : Deleted Appointment */
 const deleteAppointments = async (appointmentID: string | number) => {
   const deleteUrl = `/appointment/${appointmentID}`;
-  const { data } = await axios.delete(deleteUrl);
+  const { data } = await axiosClient.delete(deleteUrl);
   return data;
 };
 const useDeleteAppointment = () => {
@@ -141,11 +142,17 @@ const useDeleteAppointment = () => {
     (appointmentID: string | number) => deleteAppointments(appointmentID),
     {
       onSuccess: (data) => {
-        showToast(
-          toast,
-          data,
-          `Successfully deleted ${data.appointmentResponse.title}`
-        );
+        console.log("onSuccess", data);
+        if (data.success) {
+          showToast(
+            toast,
+            data,
+            `Successfully deleted ${data.appointmentResponse.title}`
+          );
+        } else {
+          showToast(toast, data, data?.errorMessage);
+        }
+
         queryClient.invalidateQueries("getTeacherAppointments");
       },
     }

@@ -1,2 +1,3 @@
 import { AuthContext } from "./AuthContext";
-export { AuthContext };
+import axiosClient from "./axiosClient";
+export { AuthContext, axiosClient };

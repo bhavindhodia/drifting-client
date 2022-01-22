@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from "react";
+import { ReactNode } from "react";
 import {
   IconButton,
   Avatar,
@@ -21,43 +21,81 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import {
   FiHome,
-  FiTrendingUp,
   FiCompass,
-  FiStar,
-  FiSettings,
   FiMenu,
   FiBell,
+  FiStar,
+  FiTrendingUp,
+  FiSettings,
   FiChevronDown,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { Link as ReactLink } from "react-router-dom";
-import { AuthContext } from "services/AuthContext";
-import { useAuth } from "hooks";
+import { useLogout } from "hooks";
 import { Logo } from "atoms";
+import { useUserData, useIsAuthenticated } from "hooks";
 
 interface LinkItemProps {
   name: string;
   url: string;
   icon: IconType;
+  role: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, url: "/teacherDashboard/" },
+  {
+    name: "Home",
+    icon: FiHome,
+    url: "/studentDashboard/",
+    role: "STUDENT",
+  },
+  {
+    name: "Profile",
+    icon: FiCompass,
+    url: "/studentDashboard/profile",
+    role: "STUDENT",
+  },
+  {
+    name: "Meeting",
+    icon: FiCompass,
+    url: "/studentDashboard/meeting",
+    role: "STUDENT",
+  },
+  { name: "Home", icon: FiHome, url: "/teacherDashboard/", role: "TEACHER" },
   {
     name: "Appointment",
     icon: FiTrendingUp,
     url: "/teacherDashboard/appointment",
+    role: "TEACHER",
   },
-  { name: "Profile", icon: FiCompass, url: "/teacherDashboard/profile" },
-  { name: "Payments", icon: FiStar, url: "/teacherDashboard/payments" },
-  { name: "Settings", icon: FiSettings, url: "/teacherDashboard/appointment" },
+  {
+    name: "Profile",
+    icon: FiCompass,
+    url: "/teacherDashboard/profile",
+    role: "TEACHER",
+  },
+  {
+    name: "Payments",
+    icon: FiStar,
+    url: "/teacherDashboard/payments",
+    role: "TEACHER",
+  },
+  {
+    name: "Settings",
+    icon: FiSettings,
+    url: "/teacherDashboard/appointment",
+    role: "TEACHER",
+  },
 ];
 
 export default function Sidebar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.300")}>
       <SidebarContent
@@ -95,12 +133,16 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const { isLoading: userDataLoading, data: userData } = useIsAuthenticated();
+  /* console.log("sideData", userData); */
+  const myRole = userData !== undefined ? userData?.role : "";
+
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue("white", "gray.900")}
+      bg={"white"}
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      borderRightColor={"gray.200"}
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
@@ -112,11 +154,20 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} urlPath={link.url} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
+      {userDataLoading || userData?.role === undefined ? (
+        <Center>
+          <Spinner />
+        </Center>
+      ) : (
+        LinkItems.map(
+          (link) =>
+            myRole === link.role.toString() && (
+              <NavItem key={link.name} urlPath={link.url} icon={link.icon}>
+                {link.name}
+              </NavItem>
+            )
+        )
+      )}
     </Box>
   );
 };
@@ -162,7 +213,8 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const { auth } = useContext(AuthContext);
+  const { isLoading: userDataLoading, data: userData } = useUserData();
+  const logoutMutation = useLogout();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -208,10 +260,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             >
               <HStack>
                 <Avatar
+                  // loading={userDataLoading}
                   size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
+                  name={userData?.user.name}
                 />
                 <VStack
                   display={{ base: "none", md: "flex" }}
@@ -219,12 +270,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
+                  {/* <Text fontSize="sm">{auth.userData!.name}</Text> */}
                   <Text fontSize="sm">
-                    {" "}
-                    {auth.userData ? auth.userData.name : "Loading"}
+                    {userData ? userData.user.name : "Loading"}
                   </Text>
                   <Text fontSize="xs" color="gray.600">
-                    Teacher
+                    {userData ? userData.user.role : "Loading"}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
@@ -233,13 +284,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               </HStack>
             </MenuButton>
             <MenuList
+              zIndex={9}
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
+
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              {/*  <MenuItem onClick={logoutUser}>Sign out</MenuItem> */}
+              {
+                <MenuItem onClick={() => logoutMutation.mutate()}>
+                  Sign out
+                </MenuItem>
+              }
             </MenuList>
           </Menu>
         </Flex>

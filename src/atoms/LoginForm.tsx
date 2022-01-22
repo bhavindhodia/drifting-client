@@ -16,7 +16,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link as ReactLink } from "react-router-dom";
-import { useAuth } from "hooks";
+import { useAuth, useLogin } from "hooks";
 import { AuthContext } from "services/AuthContext";
 
 const schema = yup.object().shape({
@@ -36,10 +36,10 @@ export type LoginFormInputs = {
 };
 
 const LoginForm = () => {
-  const { loginUser, authError, authLoading } = useAuth();
-
-  const { auth } = useContext(AuthContext);
-  console.log("Auth", auth);
+  //const { loginUser, authError, authLoading } = useAuth();
+  const loginMutate = useLogin();
+  /*   const { auth } = useContext(AuthContext);
+  console.log("Auth", auth); */
 
   const { register, handleSubmit, formState } = useForm<LoginFormInputs>({
     mode: "onBlur",
@@ -47,18 +47,18 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (values: LoginFormInputs) => {
-    loginUser(values);
+    loginMutate.mutate(values);
   };
 
   return (
     <>
-      {authError !== "" && (
+      {/*  {loginMutate.isError !== "" && (
         <Alert status="error">
           {" "}
           <AlertIcon />
-          {authError}{" "}
+          {login}{" "}
         </Alert>
-      )}
+      )} */}
       <FormControl
         isInvalid={!!formState.errors?.email?.message}
         errortext={formState.errors?.email?.message}
@@ -101,7 +101,7 @@ const LoginForm = () => {
         w="100%"
         colorScheme={"primary"}
         variant={"solid"}
-        isLoading={authLoading}
+        isLoading={loginMutate.isLoading}
         disabled={!!formState.errors.email || !!formState.errors.password}
       >
         Login

@@ -18,30 +18,6 @@ export default function PrivateRoute({
   const { verifyUser } = useAuth();
   //const { verifyUser, authLoading } = useAuth();
 
-  /* const verifyUser = useCallback(async () => {
-    const refreshTokenURL = "auth/refreshToken";
-    axios.post(refreshTokenURL).then(async (response) => {
-      console.log("responseStatus", response);
-      if (response.status === 200) {
-        const redirectPath = "/studentDashboard";
-        setAuth((oldValues) => {
-          return {
-            ...oldValues,
-            success: true,
-            token: response.data.token,
-            redirectPath,
-          };
-        });
-      } else {
-        setAuth((oldValues) => {
-          return { ...oldValues, token: null };
-        });
-      }
-      // call refreshToken every 5 minutes to renew the authentication token.
-      setTimeout(verifyUser, 5 * 60 * 1000);
-    });
-  }, [setAuth]); */
-
   useEffect(() => {
     if (auth.token === undefined) {
       console.log("Verifying User");
