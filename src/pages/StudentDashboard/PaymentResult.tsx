@@ -16,7 +16,7 @@ import { Link as ReactLink, useLocation } from "react-router-dom";
 import { PaymentIntent } from "@stripe/stripe-js";
 import { AppointmentType } from "hooks/appointmentReducer";
 import axios from "axios";
-import { AuthContext } from "services";
+import { AuthContext, axiosClient } from "services";
 import { useUserData } from "hooks";
 export enum PaymentResultType {
   SUCCESS = "success",
@@ -69,7 +69,7 @@ const PaymentResult: FC<PaymentResultProps> = () => {
     const studentUpdate = "/appointment/studentUpdate";
     console.log("auth?.userData?.id,", userData?.user?.id);
     try {
-      const updatedData = await axios.post(studentUpdate, {
+      const updatedData = await axiosClient.post(studentUpdate, {
         appointmentData,
         paymentIntent,
         studentID: userData?.user.id.toString(),
@@ -97,7 +97,7 @@ const PaymentResult: FC<PaymentResultProps> = () => {
     const paymentStatusUrl = `/appointment/payment-status/${payment_intent}`;
     try {
       setLoading(true);
-      const response = await axios.get(paymentStatusUrl);
+      const response = await axiosClient.get(paymentStatusUrl);
       //console.log("response", response.data.paymentStatus);
       const paymentStatus = response.data.charges.data[0].status;
       switch (paymentStatus) {
