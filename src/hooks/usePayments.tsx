@@ -1,10 +1,9 @@
 import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import axios from "axios";
-import { AppointmentModel } from "@devexpress/dx-react-scheduler";
-import { AuthContext } from "services/AuthContext";
 import { useToast, UseToastOptions, ToastId } from "@chakra-ui/react";
 import { MyPaymentIntent } from "pages/TeacherDashboard/Payments";
+import { axiosClient } from "services";
 const paymentUrl = "payment";
 
 /* Toast Message */
@@ -33,7 +32,7 @@ const showToast = (
 /* TEACHER : Get all Payments */
 const getPayments = async () => {
   const getUrl = `/${paymentUrl}/getAll`;
-  const { data } = await axios.get(getUrl);
+  const { data } = await axiosClient.get(getUrl);
 
   console.log("paymentIntentdata", data);
   return data;
@@ -48,7 +47,7 @@ const useGetPayments = () => {
 /* TEACHER : Create Single Refund */
 const singleRefund = async (paymentIntent: MyPaymentIntent) => {
   const deleteUrl = `/${paymentUrl}/refund/${paymentIntent.id}`;
-  const { data } = await axios.post(deleteUrl, {
+  const { data } = await axiosClient.post(deleteUrl, {
     paymentId: paymentIntent._id,
   });
   console.log("paymentIntentdata", data);
