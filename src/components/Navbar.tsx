@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { Box, Flex, Link, Button, Stack } from "@chakra-ui/react";
 import Logo from "atoms/Logo";
 import { Link as ReactLink } from "react-router-dom";
-import { useAuth } from "hooks";
+import { useIsAuthenticated } from "hooks";
 import { AuthContext, AuthContextType } from "services/AuthContext";
 
 /* const Links = ["Dashboard", "Projects", "Team"];
@@ -14,6 +14,7 @@ type NavbarType = {
 
 const NavBar: React.FC<{}> = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { data: auth } = useIsAuthenticated();
   //const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
   /*   const { verifyUser } = useAuth();
@@ -31,7 +32,7 @@ const NavBar: React.FC<{}> = (props) => {
         <Logo />
       </Box>
       <MenuToggle toggle={toggle} isOpen={isOpen} />
-      <MenuLinks isOpen={isOpen} />
+      <MenuLinks isOpen={isOpen} authState={auth} />
       {/* <MenuLinks isOpen={isOpen} authState={auth} /> */}
     </NavBarContainer>
   );
@@ -86,10 +87,10 @@ const MenuItem = ({
 
 const MenuLinks = ({
   isOpen,
-}: //authState,
-{
+  authState,
+}: {
   isOpen: boolean;
-  //authState: AuthContextType;
+  authState: AuthContextType | undefined;
 }) => {
   return (
     <Box
@@ -107,7 +108,14 @@ const MenuLinks = ({
         <MenuItem url="/aboutus">About Us</MenuItem>
         <MenuItem url="/blog">Blog </MenuItem>
         {/*   <MenuItem url={authState.redirectPath} isLast> */}
-        <MenuItem url="/redirectPath" isLast>
+        <MenuItem
+          url={
+            authState !== undefined && authState.success
+              ? authState.redirectPath
+              : "/login"
+          }
+          isLast
+        >
           <Button
             size="sm"
             rounded="md"
@@ -117,8 +125,9 @@ const MenuLinks = ({
               bg: ["primary.100", "primary.100", "primary.600", "primary.600"],
             }}
           >
-            {/* {authState.success ? "Dashboard" : "Log In"} */}
-            Dashboard
+            {authState !== undefined && authState.success
+              ? "Dashboard"
+              : "Log In"}
           </Button>
         </MenuItem>
       </Stack>

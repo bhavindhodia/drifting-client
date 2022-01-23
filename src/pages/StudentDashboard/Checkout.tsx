@@ -5,13 +5,14 @@ import {
   Appearance,
 } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import axios from "axios";
+
 import CheckoutForm from "./CheckoutForm";
-import { AuthContext } from "services";
+import { AuthContext, axiosClient } from "services";
 import { AppContext } from "hooks/appointmentContext";
 import { Spinner } from "@chakra-ui/spinner";
 import { useLocation } from "react-router-dom";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
+import { useUserData } from "hooks";
 
 const stripePromise = loadStripe(
   "pk_test_51K4FivSGS4s5bT6hJrc9mB6eZsebzyqfh5NnUNOK2g18wUL7PQk0K7urcxAGmVyvIACPk2NDsC3Ykfwkl9mGEFwF00Q0w3xDMk"
@@ -20,23 +21,24 @@ const stripePromise = loadStripe(
 const Checkout: FC = () => {
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
-  const { auth } = useContext(AuthContext);
+  const { data: userData } = useUserData();
+  //const { auth } = useContext(AuthContext);
   const location = useLocation<{ appointmentData: AppointmentModel }>();
-
+  console.log("userData", userData);
   useEffect(() => {
     setLoading(true);
     console.log("location", location);
-    axios
+    axiosClient
       .post(
         "/appointment/create-payment-intent",
         {
           items: [{ id: "appointment" }],
-          userData: auth.userData,
+          userData: userData?.user,
           appointmentData: location.state.appointmentData,
-        },
-        {
-          headers: { Authorization: `Bearer ${auth.token}` },
         }
+        /* {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        } */
       )
       .then(({ data }) => {
         console.log("metaData", data.metadata);

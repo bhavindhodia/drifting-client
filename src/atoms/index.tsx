@@ -4,6 +4,8 @@ import SignupForm from "./SignupForm";
 import PrivateRoute from "./PrivateRoute";
 import MeetCard from "./MeetCard";
 import Sidebar from "./Sidebar";
+import ProfileModal from "./ProfileModal";
+import PasswordModal from "./PasswordModal";
 import showToast, { showMyToast } from "./ShowToast";
 export {
   Logo,
@@ -14,4 +16,6 @@ export {
   showToast,
   showMyToast,
   Sidebar,
+  PasswordModal,
+  ProfileModal,
 };

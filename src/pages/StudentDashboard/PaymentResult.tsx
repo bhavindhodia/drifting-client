@@ -17,6 +17,7 @@ import { PaymentIntent } from "@stripe/stripe-js";
 import { AppointmentType } from "hooks/appointmentReducer";
 import axios from "axios";
 import { AuthContext } from "services";
+import { useUserData } from "hooks";
 export enum PaymentResultType {
   SUCCESS = "success",
   ERROR = "error",
@@ -35,7 +36,8 @@ type LocationState = {
 };
 
 const PaymentResult: FC<PaymentResultProps> = () => {
-  const { auth } = useContext(AuthContext);
+  //const { auth } = useContext(AuthContext);
+  const { data: userData } = useUserData();
   const payment_intent = new URLSearchParams(window.location.search).get(
     "payment_intent"
   );
@@ -47,7 +49,7 @@ const PaymentResult: FC<PaymentResultProps> = () => {
   const [loading, setLoading] = useState(false);
   const { state } = useLocation<LocationState>();
 
-  console.log("auth", auth);
+  //console.log("auth", auth);
   useEffect(() => {
     if (redirect_status !== "succeeded" || state !== undefined) {
       setData({
@@ -55,22 +57,22 @@ const PaymentResult: FC<PaymentResultProps> = () => {
         description: state?.title,
         resultType: PaymentResultType.ERROR,
       });
-    } else if (auth.userData !== undefined) {
+    } else if (userData?.user !== undefined) {
       checkPaymentStatus();
     }
-  }, [auth.userData]);
+  }, [userData?.user]);
 
   const createAppointment = async (
     appointmentData: AppointmentType,
     paymentIntent: PaymentIntent
   ) => {
     const studentUpdate = "/appointment/studentUpdate";
-    console.log("auth?.userData?.id,", auth?.userData?.id);
+    console.log("auth?.userData?.id,", userData?.user?.id);
     try {
       const updatedData = await axios.post(studentUpdate, {
         appointmentData,
         paymentIntent,
-        studentID: auth?.userData?.id.toString(),
+        studentID: userData?.user.id.toString(),
       });
       console.log("updatedData", updatedData);
     } catch (error) {
@@ -154,7 +156,7 @@ const PaymentResult: FC<PaymentResultProps> = () => {
     }
   };
 
-  return loading || !auth.userData ? (
+  return loading || !userData?.user ? (
     <Center>
       <Spinner />
     </Center>

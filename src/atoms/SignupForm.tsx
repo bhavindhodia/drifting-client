@@ -19,6 +19,7 @@ import { Link as ReactLink } from "react-router-dom";
 import { AuthContext, AuthContextType } from "services/AuthContext";
 
 import axios from "axios";
+import { useRegister } from "hooks/useAuth2";
 const schema = yup.object().shape({
   name: yup
     .string()
@@ -37,6 +38,10 @@ const schema = yup.object().shape({
     .min(8, "Must be 8 characters or more")
     .max(20, "Must be 20 characters or less")
     .required("Required"),
+  confirmPassword: yup
+    .string()
+    .required("Confirm password is required")
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
 
 export type SignupFormInputs = {
@@ -44,6 +49,7 @@ export type SignupFormInputs = {
   username: string;
   name: string;
   password: string;
+  confirmPassword: string;
 };
 
 export default ({ title }: { title: string }) => {
@@ -55,7 +61,8 @@ export default ({ title }: { title: string }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
-  const onSubmit = async (values: SignupFormInputs) => {
+  const registerMutate = useRegister();
+  /*  const onSubmit = async (values: SignupFormInputs) => {
     console.log(values);
     setLoading(true);
     const singupURL = "/auth/signup/";
@@ -75,8 +82,12 @@ export default ({ title }: { title: string }) => {
     } finally {
       setLoading(false);
     }
+  }; */
+
+  const onSubmit = async (values: SignupFormInputs) => {
+    registerMutate.mutate(values);
   };
-  console.log("res", auth);
+  //console.log("res", auth);
   return (
     <>
       {error !== "" && (
@@ -153,6 +164,23 @@ export default ({ title }: { title: string }) => {
           {formState.errors?.password?.message}
         </FormErrorMessage>
       </FormControl>
+      <FormControl
+        isInvalid={!!formState.errors?.confirmPassword?.message}
+        errortext={formState.errors?.confirmPassword?.message}
+        my="6"
+        isRequired
+      >
+        <FormLabel>Confirm Password</FormLabel>
+        <Input
+          {...register("confirmPassword")}
+          type="password"
+          placeholder="Confirm Password"
+          name="confirmPassword"
+        />
+        <FormErrorMessage>
+          {formState.errors?.confirmPassword?.message}
+        </FormErrorMessage>
+      </FormControl>
 
       <Button
         onClick={handleSubmit(onSubmit)}
@@ -160,11 +188,13 @@ export default ({ title }: { title: string }) => {
         w="100%"
         colorScheme={"primary"}
         variant={"solid"}
+        isLoading={registerMutate.isLoading}
         disabled={
           !!formState.errors.name ||
           !!formState.errors.username ||
           !!formState.errors.password ||
           !!formState.errors.password
+          // registerMutate.isLoading
         }
       >
         Signup

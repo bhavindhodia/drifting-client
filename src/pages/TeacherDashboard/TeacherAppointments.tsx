@@ -88,7 +88,6 @@ const TeacherAppointments = () => {
   const createAppointment = usePostAppointment();
   const updateAppointment = useUpdateAppointment();
   const deleteAppointment = useDeleteAppointment();
-  const toast = useToast();
 
   const commitChanges = async ({ added, changed, deleted }: ChangeSet) => {
     if (added) {

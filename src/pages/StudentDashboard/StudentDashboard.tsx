@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import StudentAppointment from "./StudentAppointments";
-import Profile from "./Profile";
+import { Profile } from "components";
 import { Sidebar } from "atoms";
 import Meeting from "./Meeting";
 import Checkout from "./Checkout";

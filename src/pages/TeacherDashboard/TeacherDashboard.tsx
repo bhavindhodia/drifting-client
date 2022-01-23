@@ -1,7 +1,7 @@
 import { Sidebar } from "atoms";
 import { useIsAuthenticated } from "hooks";
 import BasicStatistics from "./Stats";
-import Profile from "./Profile";
+import { Profile } from "components/";
 import Payments from "./Payments";
 import TeacherAppointments from "./TeacherAppointments";
 
@@ -20,13 +20,14 @@ const TeacherDashboard = () => {
   return myRole !== "TEACHER" ? (
     <Redirect to={`/${myRole.toLowerCase().concat("Dashboard")}`} />
   ) : (
-    <Router forceRefresh={true}>
+    <Router>
       <Sidebar>
         <Switch>
           <Route exact path="/teacherDashboard" component={BasicStatistics} />
           {/*   <Redirect to="/home" /> */}
           <Route exact path="/home" render={() => <Redirect to="/home" />} />
           <Route
+            exact
             path="/teacherDashboard/appointment"
             component={TeacherAppointments}
           />

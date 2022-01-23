@@ -109,7 +109,7 @@ const LoginForm = () => {
 
       <HStack justifyContent="center">
         <Text color={"primary.500"}> New user ?</Text>{" "}
-        <Link as={ReactLink} to="/signup" color={"primary.700"}>
+        <Link as={ReactLink} to="/register" color={"primary.700"}>
           {" "}
           Get started here
         </Link>

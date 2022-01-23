@@ -6,6 +6,7 @@ import Provide from "./Homepage/Provide";
 import Booking from "./Homepage/Booking";
 import Tips from "./Homepage/Tips";
 import Footer from "./Footer";
+import Profile from "./Profile";
 
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
@@ -22,4 +23,5 @@ export {
   PublicRoute,
   PrivateRoute,
   ProtectedRoutes,
+  Profile,
 };

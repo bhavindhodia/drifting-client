@@ -14,6 +14,7 @@ import {
   useIsAuthenticated,
   useUserData,
   useLogout,
+  useProfileUpdate,
 } from "./useAuth2";
 
 export {
@@ -26,4 +27,10 @@ export {
   useDeleteAppointment,
 };
 export { useGetPayments, useSingleRefund };
-export { useLogin, useIsAuthenticated, useUserData, useLogout };
+export {
+  useLogin,
+  useIsAuthenticated,
+  useUserData,
+  useLogout,
+  useProfileUpdate,
+};
