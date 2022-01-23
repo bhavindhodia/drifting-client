@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { SimpleGrid, Spacer } from "@chakra-ui/layout";
 
 import { MeetCard } from "atoms";
-import axios from "axios";
+import a from "axios";
 import { MeetCardType } from "atoms/MeetCard";
+import { axiosClient } from "services";
 
 const Meeting = () => {
   useEffect(() => {
@@ -15,7 +16,7 @@ const Meeting = () => {
   const getMeets = async () => {
     const getMeetUrl = "appointment/meetings";
     try {
-      const response = await axios.get(getMeetUrl);
+      const response = await axiosClient.get(getMeetUrl);
       let appointmentData = response.data;
 
       //      console.log("appointmentData", appointmentData);
