@@ -8,6 +8,7 @@ import { showToast, showMyToast } from "atoms";
 import { useToast } from "@chakra-ui/toast";
 import { ProfileFormInputs } from "atoms/ProfileModal";
 import { SignupFormInputs } from "atoms/SignupForm";
+import { PasswordFormInputs } from "atoms/PasswordModal";
 
 export enum UserRole {
   STUDENT,
@@ -139,6 +140,7 @@ const useIsAuthenticated = () => {
       keepPreviousData: true,
       staleTime: 1000 * 60 * 5,
       retry: 1,
+      refetchOnWindowFocus: true,
     }
   );
 };
@@ -185,10 +187,10 @@ const useLogout = () => {
   });
 };
 
-/* User : Login Authentication */
+/* User : Update Profile */
 
 const updateProfile = async (data: ProfileFormInputs, userID: string) => {
-  const loginURL = `/${baseURL}/profileUpdate/${userID}`;
+  const loginURL = `/${baseURL}/profile-update/${userID}`;
   const { email, username, name } = data;
   const loginResponse = await axiosClient.patch(loginURL, data);
   return loginResponse.data;
@@ -216,6 +218,36 @@ const useProfileUpdate = () => {
     }
   );
 };
+/* User : Reset Password */
+
+const resetPassword = async (data: PasswordFormInputs) => {
+  const resetURL = `/${baseURL}/reset-password/`;
+  //const { email, username, name } = data;
+  const loginResponse = await axiosClient.post(resetURL, data);
+  return loginResponse.data;
+};
+
+const useResetPassword = () => {
+  let toast = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    "loginAuth",
+    (newData: PasswordFormInputs) => resetPassword(newData),
+    {
+      onSuccess: (data) => {
+        console.log("dataM", data);
+        //queryClient.invalidateQueries("getUserData");
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          console.log("dataMError", error.response?.data.errorMessage);
+          showMyToast(toast, "error", error.response?.data.errorMessage);
+        }
+      },
+    }
+  );
+};
 
 export {
   useLogin,
@@ -224,4 +256,5 @@ export {
   useLogout,
   useProfileUpdate,
   useRegister,
+  useResetPassword,
 };

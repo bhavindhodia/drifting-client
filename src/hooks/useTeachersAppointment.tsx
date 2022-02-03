@@ -154,6 +154,7 @@ const useDeleteAppointment = () => {
         }
 
         queryClient.invalidateQueries("getTeacherAppointments");
+        queryClient.invalidateQueries("getMeets");
       },
     }
   );

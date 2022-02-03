@@ -29,10 +29,12 @@ import {
   FiCompass,
   FiMenu,
   FiBell,
-  FiStar,
-  FiTrendingUp,
+  FiUser,
+  FiCalendar,
+  FiClock,
   FiSettings,
   FiChevronDown,
+  FiDollarSign,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
@@ -49,40 +51,52 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   {
-    name: "Home",
-    icon: FiHome,
+    name: "Appointment",
+    icon: FiCalendar,
     url: "/studentDashboard/",
     role: "STUDENT",
   },
   {
     name: "Profile",
-    icon: FiCompass,
+    icon: FiUser,
     url: "/studentDashboard/profile",
     role: "STUDENT",
   },
   {
     name: "Meeting",
-    icon: FiCompass,
+    icon: FiClock,
     url: "/studentDashboard/meeting",
+    role: "STUDENT",
+  },
+  {
+    name: "Payments",
+    icon: FiDollarSign,
+    url: "/studentDashboard/payments",
     role: "STUDENT",
   },
   { name: "Home", icon: FiHome, url: "/teacherDashboard/", role: "TEACHER" },
   {
     name: "Appointment",
-    icon: FiTrendingUp,
+    icon: FiCalendar,
     url: "/teacherDashboard/appointment",
     role: "TEACHER",
   },
   {
     name: "Profile",
-    icon: FiCompass,
+    icon: FiUser,
     url: "/teacherDashboard/profile",
     role: "TEACHER",
   },
   {
     name: "Payments",
-    icon: FiStar,
+    icon: FiDollarSign,
     url: "/teacherDashboard/payments",
+    role: "TEACHER",
+  },
+  {
+    name: "Meeting",
+    icon: FiClock,
+    url: "/teacherDashboard/meeting",
     role: "TEACHER",
   },
   {

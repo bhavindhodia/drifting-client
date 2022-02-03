@@ -1,4 +1,4 @@
-import { useState, ComponentType } from "react";
+import { useState, ComponentType, useCallback } from "react";
 import {
   ViewState,
   EditingState,
@@ -31,8 +31,8 @@ import { Spinner } from "@chakra-ui/spinner";
 import { Center } from "@chakra-ui/layout";
 import { Progress } from "@chakra-ui/progress";
 import CustomBasicLayout from "./CustomBasicLayout";
-import CustomCommandLayout from "./CustomCommandLayout";
-import { useToast } from "@chakra-ui/toast";
+/* import CustomCommandLayout from "./CustomCommandLayout"; */
+
 type CurrentStateType = {
   viewName: string;
   currentDate: Date;
@@ -74,7 +74,7 @@ const theme = createTheme({
     fontFamily: "Poppins",
   },
 });
-const toastId = "toastID";
+
 const TeacherAppointments = () => {
   const [currentState, setCurrentState] = useState<CurrentStateType>({
     viewName: "Week",
@@ -90,6 +90,7 @@ const TeacherAppointments = () => {
   const deleteAppointment = useDeleteAppointment();
 
   const commitChanges = async ({ added, changed, deleted }: ChangeSet) => {
+    if (data?.readOnly) return;
     if (added) {
       /* console.log("ADDED", added); */
       const appointmentData: AppointmentModel = {
@@ -114,17 +115,31 @@ const TeacherAppointments = () => {
   };
 
   const onDateChange: (currentDate: Date) => void = (currentDate) => {
-    /* console.log("currentDate", currentDate); */
+    console.log("currentDate", currentDate);
     setCurrentState((oldData) => ({ viewName: oldData.viewName, currentDate }));
-    //setCurrentState({ viewName: "WEEK", currentDate });
   };
   const setCurrentViewName: (viewName: string) => void = (viewName) => {
-    /* console.log("viewName", viewName); */
     setCurrentState((oldData) => ({
       viewName,
       currentDate: oldData.currentDate,
     }));
   };
+  /* 
+  const CustomCommandButton: ComponentType<AppointmentForm.CommandButtonProps> = useCallback(
+    ({ children, id, ...restProps }) => {
+      if (id === "deleteButton") {
+        return (
+          <CommandB
+            id={id}
+            {...restProps}
+            disabled={data?.readOnly}
+          />
+        );
+      }
+      return <AppointmentForm.CommandButton id={id} {...restProps} />;
+    },
+    [data?.readOnly]
+  ); */
 
   return isLoading ? (
     <Center py={6} minH={"80vh"}>
@@ -162,7 +177,10 @@ const TeacherAppointments = () => {
         <ConfirmationDialog />
         <AppointmentForm
           basicLayoutComponent={CustomBasicLayout}
-          commandLayoutComponent={CustomCommandLayout}
+          //commandButtonComponent={CustomCommandButton}
+          //commandLayoutComponent={CustomCommandLayout}
+          //readOnly={data?.readOnly}
+
           /* basicLayoutComponent={BasicLayout}
         commandLayoutComponent={CommandLayout} */
         />

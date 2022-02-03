@@ -15,8 +15,12 @@ import {
   useUserData,
   useLogout,
   useProfileUpdate,
+  useResetPassword,
 } from "./useAuth2";
 
+import { usePaymentIntent } from "./usePayment";
+import { useGetMeet } from "./useMeetings";
+import { useAppointmentStats } from "./useStats";
 export {
   useAuth,
   useFindUser,
@@ -33,4 +37,9 @@ export {
   useUserData,
   useLogout,
   useProfileUpdate,
+  useResetPassword,
 };
+
+export { usePaymentIntent };
+export { useGetMeet };
+export { useAppointmentStats };

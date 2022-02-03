@@ -3,7 +3,7 @@ import { AppointmentForm } from "@devexpress/dx-react-scheduler-material-ui";
 
 const CustomCommandLayout: ComponentType<AppointmentForm.CommandLayoutProps & {
   readOnlyState?: boolean;
-}> = ({ children, ...restProps }) => {
+}> = ({ children, readOnlyState, ...restProps }) => {
   return (
     <AppointmentForm.CommandLayout
       {...restProps}

@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/modal";
 import { Input } from "@chakra-ui/input";
 import { Button } from "@chakra-ui/button";
-import { useProfileUpdate } from "hooks";
+import { useProfileUpdate, useResetPassword } from "hooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -54,13 +54,15 @@ const schema = yup.object().shape({
 
 const PasswordModal = ({ userData, isOpen, onClose }: ProfileModalType) => {
   const profileMutate = useProfileUpdate();
+  const passwordMutate = useResetPassword();
   const { register, handleSubmit, formState } = useForm<PasswordFormInputs>({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   const onSubmit = async (values: PasswordFormInputs) => {
-    // profileMutate.mutate(values);
+    passwordMutate.mutate(values);
+    console.log("val", values);
     onClose();
   };
   return (

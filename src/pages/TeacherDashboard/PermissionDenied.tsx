@@ -1,5 +1,5 @@
 import React from "react";
-import { Heading, Box, Flex, Text } from "@chakra-ui/layout";
+import { Heading, Box, Flex, Text, Center } from "@chakra-ui/layout";
 import { Icon } from "@chakra-ui/icon";
 import { AiOutlineClose } from "react-icons/ai";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
@@ -10,7 +10,14 @@ const PermissionDenied = ({
   appointmentData: AppointmentModel;
 }) => {
   return (
-    <Box textAlign="center" py={10} px={6}>
+    <Center
+      flexDirection={"column"}
+      justifyContent={"center"}
+      w="100%"
+      h="100%"
+      pt={6}
+      mt={6}
+    >
       <Box display="inline-block">
         <Flex
           flexDirection="column"
@@ -31,7 +38,7 @@ const PermissionDenied = ({
       <Text color={"gray.700"}>
         Sorry,this meet has been created by {appointmentData?.teacherID.name}.
       </Text>
-    </Box>
+    </Center>
   );
 };
 

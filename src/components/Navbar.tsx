@@ -4,7 +4,7 @@ import Logo from "atoms/Logo";
 import { Link as ReactLink } from "react-router-dom";
 import { useIsAuthenticated } from "hooks";
 import { AuthContext, AuthContextType } from "services/AuthContext";
-
+import { useQueryClient } from "react-query";
 /* const Links = ["Dashboard", "Projects", "Team"];
  */
 type NavbarType = {
@@ -14,16 +14,11 @@ type NavbarType = {
 
 const NavBar: React.FC<{}> = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const { data: auth } = useIsAuthenticated();
-  //const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
-  /*   const { verifyUser } = useAuth();
-  const { auth } = useContext(AuthContext);
-  useEffect(() => {
-    verifyUser();
-  }, [verifyUser]); */
-
-  /*  console.log("Menu User", auth); */
+  const queryClient = useQueryClient();
+  const { data: auth, isError } = useIsAuthenticated();
+  if (isError) {
+    // queryClient.invalidateQueries("getisAuthenticated");
+  }
   const toggle = () => setIsOpen(!isOpen);
 
   return (

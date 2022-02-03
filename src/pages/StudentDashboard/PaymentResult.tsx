@@ -98,16 +98,16 @@ const PaymentResult: FC<PaymentResultProps> = () => {
     try {
       setLoading(true);
       const response = await axiosClient.get(paymentStatusUrl);
-      //console.log("response", response.data.paymentStatus);
+      console.log("response", response.data);
       const paymentStatus = response.data.charges.data[0].status;
       switch (paymentStatus) {
         case "succeeded":
-          const appointmentData: AppointmentType =
-            JSON.parse(localStorage.getItem("newAppointment") || "") || "";
+          const appointmentData: AppointmentType = response.data.metadata;
+
           createAppointment(appointmentData, response.data);
           setData({
             title: "Payment Success",
-            description: "Your appointment has been booked successfully",
+            description: `Your appointment for ${appointmentData.title} has been booked successfully`,
             resultType: PaymentResultType.SUCCESS,
           });
           break;

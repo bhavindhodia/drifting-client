@@ -2,7 +2,7 @@ import { ComponentType, useContext } from "react";
 import { List, ListIcon, ListItem } from "@chakra-ui/layout";
 import { AiOutlineUser } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
-import { AuthContext } from "services/AuthContext";
+import { useUserData } from "hooks";
 import {
   chakra,
   Box,
@@ -20,18 +20,17 @@ const CustomBasicLayout: ComponentType<AppointmentForm.BasicLayoutProps> = ({
   ...restprop
 }) => {
   const history = useHistory();
-  const { auth } = useContext(AuthContext);
+  //const { auth } = useContext(AuthContext);
+
+  const { data: userData } = useUserData();
 
   const appointmentStart = new Date(appointmentData.startDate).toLocaleString();
   const appointmentEnd = new Date(appointmentData.endDate).toLocaleString();
   const result = appointmentData.studentID.find(
-    (item: { _id: String; name: String }) => item._id === auth?.userData?.id
+    (item: { _id: String; name: String }) => item._id === userData?.user.id
   );
 
-  console.log("appointmentData", appointmentData);
-  console.log("result", result);
   const onCheckout = (appointmentData: AppointmentModel) => {
-    localStorage.setItem("newAppointment", JSON.stringify(appointmentData));
     history.push({
       pathname: "/studentDashboard/checkout",
       state: { appointmentData },

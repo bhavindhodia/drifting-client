@@ -11,6 +11,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import Meeting, { TeacherMeeting } from "pages/StudentDashboard/Meeting";
 
 const TeacherDashboard = () => {
   const { isLoading, data } = useIsAuthenticated();
@@ -33,6 +34,7 @@ const TeacherDashboard = () => {
           />
           <Route path="/teacherDashboard/profile" component={Profile} />
           <Route path="/teacherDashboard/payments" component={Payments} />
+          <Route path="/teacherDashboard/meeting" component={TeacherMeeting} />
         </Switch>
       </Sidebar>
     </Router>

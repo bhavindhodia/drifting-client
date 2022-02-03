@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import {
   Table,
   Thead,
@@ -8,42 +7,47 @@ import {
   Td,
   TableCaption,
 } from "@chakra-ui/table";
-import { useGetPayments, useSingleRefund } from "hooks";
-import { Button } from "@chakra-ui/button";
+import { useGetPayments, useSingleRefund, useUserData } from "hooks";
+import { IconButton } from "@chakra-ui/button";
 import { Center, Flex, Heading } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
+import { Link } from "@chakra-ui/layout";
 import { Tag, TagRightIcon } from "@chakra-ui/tag";
-import { PaymentIntent } from "@stripe/stripe-js";
+import { Tooltip } from "@chakra-ui/tooltip";
+import { IconType } from "react-icons";
+import { MyPaymentIntent } from "types";
+import { navigateToExternalUrl } from "utils";
+
 import { Icon } from "@chakra-ui/icon";
 import { FcMoneyTransfer } from "react-icons/fc";
 import { BiCheckDouble, BiLoader } from "react-icons/bi";
 import { GrRevert } from "react-icons/gr";
-import { BsFillExclamationTriangleFill } from "react-icons/bs";
+import { BsFillExclamationTriangleFill, BsReceipt } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import { IconType } from "react-icons";
-
-export interface MyPaymentIntent extends PaymentIntent {
-  _id: string;
-  appointmentId: string;
-  studentId: string;
-  refunded: boolean;
-}
 
 const Payments = () => {
   const { data, isLoading } = useGetPayments();
+  const { data: userData } = useUserData();
   const createRefund = useSingleRefund();
 
   const handleRefund = (item: MyPaymentIntent) => {
     createRefund.mutate(item);
   };
 
-  return isLoading ? (
+  return isLoading || userData === undefined ? (
     <Center py={6} minH={"80vh"}>
       <Spinner />
     </Center>
-  ) : data?.paymentIntents.length > 0 ? (
+  ) : data.paymentIntents !== undefined || data.paymentIntents.length > 0 ? (
     <Table variant="simple" colorScheme={"blackAlpha"}>
-      <TableCaption>Imperial to metric conversion factors</TableCaption>
+      <TableCaption>
+        Find more metrics about payments at &nbsp;
+        <Link href="https://dashboard.stripe.com/" isExternal>
+          <Heading color={"#635bff"} variant={"h4"} size={"sm"}>
+            Stripe Dashboard
+          </Heading>
+        </Link>
+      </TableCaption>
       <Thead>
         <Tr>
           <Th>Amount</Th>
@@ -91,7 +95,9 @@ const Payments = () => {
 
           return (
             <Tr>
-              <Td>US${item.amount}</Td>
+              <Td>
+                {item.currency.toUpperCase()} ${item.amount / 100}
+              </Td>
               <Td>
                 <Tag
                   borderRadius="full"
@@ -105,14 +111,44 @@ const Payments = () => {
               <Td>{item.description}</Td>
               <Td>{new Date(item.created * 1000).toLocaleString()}</Td>
               <Td>
-                <Button
-                  isLoading={createRefund.isLoading}
-                  isDisabled={item.refunded}
-                  size="sm"
-                  onClick={() => handleRefund(item)}
+                {userData.user.role.toString() === "TEACHER" && (
+                  <Tooltip
+                    hasArrow
+                    label="Refund Payment"
+                    bg="gray.300"
+                    color="black"
+                  >
+                    <IconButton
+                      aria-label="Refund"
+                      icon={<GrRevert />}
+                      isLoading={createRefund.isLoading}
+                      isDisabled={item.refunded}
+                      size="sm"
+                      mx={1}
+                      colorScheme={"purple"}
+                      //bgColor={"purple"}
+                      onClick={() => handleRefund(item)}
+                    />
+                  </Tooltip>
+                )}
+                <Tooltip
+                  hasArrow
+                  label="View Recipt"
+                  bg="gray.300"
+                  color="black"
                 >
-                  Refund
-                </Button>
+                  <Link
+                    href={`${item.charges.data[0][0].receipt_url}`}
+                    isExternal
+                  >
+                    <IconButton
+                      aria-label="Recipt"
+                      icon={<BsReceipt />}
+                      size="sm"
+                      mx={1}
+                    />
+                  </Link>
+                </Tooltip>
               </Td>
             </Tr>
           );

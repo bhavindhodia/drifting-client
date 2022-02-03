@@ -26,7 +26,7 @@ const PublicRoute = ({
   const isAuth = data?.token !== undefined ? true : false;
 
   return isLoading ? (
-    <Center>
+    <Center h={"100vh"}>
       <Spinner />
     </Center>
   ) : (

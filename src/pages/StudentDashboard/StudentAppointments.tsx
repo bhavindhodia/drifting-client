@@ -21,10 +21,9 @@ import {
   AppointmentForm,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import { useGetAppointment, usePostAppointment } from "hooks";
+import { useGetAppointment, usePostAppointment, useUserData } from "hooks";
 import { Spinner } from "@chakra-ui/spinner";
 import { Center } from "@chakra-ui/layout";
-import { AuthContext } from "services/AuthContext";
 import CustomBasicLayout from "./CustomBasicLayout";
 import AppointmentLoading from "./AppointmentLoading";
 
@@ -44,11 +43,12 @@ const Appointment: ComponentType<Appointments.AppointmentProps> = ({
   data,
   ...restProps
 }) => {
-  const { auth } = useContext(AuthContext);
+  //  const { auth } = useContext(AuthContext);
+  const { data: userData } = useUserData();
   const readOnly = data?.studentID.find(
-    (item: { name: string; _id: string }) => item._id === auth.userData?.id
+    (item: { name: string; _id: string }) => item._id === userData?.user.id
   );
-  console.log("readOnly", readOnly);
+  console.log("data", data);
   let appointmentColor = "#01476B";
   if (data?.readOnly) {
     appointmentColor = "#d5d5d5";
@@ -105,7 +105,7 @@ const TeacherAppointments = () => {
   };
 
   const onDateChange: (currentDate: Date) => void = (currentDate) => {
-    console.log("currentDate", currentDate);
+    /* console.log("currentDate", currentDate); */
     setCurrentState((oldData) => ({ viewName: oldData.viewName, currentDate }));
   };
   const setCurrentViewName: (viewName: string) => void = (viewName) => {
