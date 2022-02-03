@@ -17,14 +17,14 @@ import { usePublishableKey } from "hooks/usePayment";
 import { axiosClient } from "services";
 import { AxiosResponse } from "axios";
 
-/* const stripePromise = axiosClient
+const stripePromise = axiosClient
   .get("payment/publishable-key")
   .then((response: AxiosResponse<{ success: boolean; pKey: string }, Error>) =>
     loadStripe(response.data.pKey)
-  ); */
-const stripePromise = loadStripe(
+  );
+/* const stripePromise = loadStripe(
   "pk_test_51KMEcKATulpGYXk79afZReVLyPX0nOzbj2B0Y0YsT6AbSvGLCWSFHuNaekovKFDUR0Rl5SyzMcNoEU0gP2TT7ib700yaFdTQ04"
-);
+); */
 
 const Checkout: FC = () => {
   const { data: userData } = useUserData();
