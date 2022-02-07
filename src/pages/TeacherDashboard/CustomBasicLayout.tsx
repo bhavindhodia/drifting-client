@@ -1,13 +1,8 @@
-import React, { ComponentType, useState, useEffect } from "react";
+import React, { ComponentType } from "react";
 import { AppointmentForm } from "@devexpress/dx-react-scheduler-material-ui";
 import PermissionDenied from "./PermissionDenied";
 import { Tag, TagLabel } from "@chakra-ui/tag";
 import { Avatar } from "@chakra-ui/avatar";
-
-type OptionsType = {
-  value: string;
-  label: string;
-};
 
 const CustomTag = ({ name }: { name: string }) => (
   <Tag size="lg" mx={1} colorScheme={"green"} borderRadius="full">

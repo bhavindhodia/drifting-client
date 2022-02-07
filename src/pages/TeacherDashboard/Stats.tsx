@@ -5,11 +5,11 @@ import {
   SimpleGrid,
   Stat,
   StatLabel,
-  HStack,
   Center,
   Spinner,
   StatNumber,
   useColorModeValue,
+  Heading,
 } from "@chakra-ui/react";
 import { useUserData, useAppointmentStats } from "hooks";
 import { ReactNode } from "react";
@@ -85,20 +85,33 @@ export default function BasicStatistics() {
         >
           Welcome {userData?.user.name}
         </chakra.h1>
+
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
           <StatsCard
             title={"Upcomping Meets"}
-            stat={statsData.cardStatsData.upCommingMeet}
+            stat={
+              statsData.cardStatsData === undefined
+                ? 0
+                : statsData.cardStatsData.upCommingMeet
+            }
             icon={<BsPerson size={"3em"} />}
           />
           <StatsCard
             title={"No. of Students Registered"}
-            stat={statsData.cardStatsData.registeredStudent}
+            stat={
+              statsData.cardStatsData === undefined
+                ? 0
+                : statsData.cardStatsData.registeredStudent
+            }
             icon={<FiServer size={"3em"} />}
           />
           <StatsCard
             title={"Today's Meet"}
-            stat={statsData.cardStatsData.todaysMeet}
+            stat={
+              statsData.cardStatsData === undefined
+                ? 0
+                : statsData.cardStatsData.todaysMeet
+            }
             icon={<GoLocation size={"3em"} />}
           />
         </SimpleGrid>
@@ -106,32 +119,36 @@ export default function BasicStatistics() {
 
       <Box height="500" mt={5}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
-            width={500}
-            height={400}
-            data={statsData.chartStatsData}
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
-            }}
-          >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="name" scale="band" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Area
-              type="monotone"
-              dataKey="studentRegistered"
-              fill="#8884d8"
-              stroke="#8884d8"
-            />
-            <Bar dataKey="studentRegistered" barSize={20} fill="#413ea0" />
-            {/* <Line type="monotone" dataKey="uv" stroke="#ff7300" />
+          {statsData.chartStatsData.length <= 0 ? (
+            <Heading size={"md"}>Not enough data for chart</Heading>
+          ) : (
+            <ComposedChart
+              width={500}
+              height={400}
+              data={statsData.chartStatsData}
+              margin={{
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 20,
+              }}
+            >
+              <CartesianGrid stroke="#f5f5f5" />
+              <XAxis dataKey="name" scale="band" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Area
+                type="monotone"
+                dataKey="studentRegistered"
+                fill="#8884d8"
+                stroke="#8884d8"
+              />
+              <Bar dataKey="studentRegistered" barSize={20} fill="#413ea0" />
+              {/* <Line type="monotone" dataKey="uv" stroke="#ff7300" />
             <Scatter dataKey="cnt" fill="red" /> */}
-          </ComposedChart>
+            </ComposedChart>
+          )}
         </ResponsiveContainer>
       </Box>
     </>

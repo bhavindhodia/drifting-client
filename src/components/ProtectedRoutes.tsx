@@ -12,7 +12,7 @@ const ProtectedRoutes = () => {
     <Switch>
       <Suspense
         fallback={
-          <Center>
+          <Center h={"100vh"}>
             <Spinner />
           </Center>
         }

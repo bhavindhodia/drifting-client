@@ -1,66 +1,80 @@
-import { FC, useEffect, useState, useContext } from "react";
-import {
-  Box,
-  Heading,
-  Text,
-  Icon,
-  Flex,
-  Button,
-  Link,
-  Center,
-  Spinner,
-} from "@chakra-ui/react";
+import { PaymentIntent, StripeError } from "@stripe/stripe-js";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Box, Flex, Heading, Text, Link } from "@chakra-ui/layout";
+import { Icon } from "@chakra-ui/icon";
+import { Button } from "@chakra-ui/button";
+import { Link as ReactLink } from "react-router-dom";
 import { FcApproval } from "react-icons/fc";
 import { AiOutlineHome } from "react-icons/ai";
-import { Link as ReactLink, useLocation } from "react-router-dom";
-import { PaymentIntent } from "@stripe/stripe-js";
 import { AppointmentType } from "hooks/appointmentReducer";
-import axios from "axios";
-import { AuthContext, axiosClient } from "services";
 import { useUserData } from "hooks";
-export enum PaymentResultType {
-  SUCCESS = "success",
-  ERROR = "error",
-  INFO = "info",
-}
-
-type PaymentResultProps = {
-  title: string;
-  description: string;
-  resultType: PaymentResultType;
-};
+import { axiosClient } from "services";
+import axios from "axios";
 
 type LocationState = {
-  title: string;
-  retultType: string;
+  paymentIntentResult: PaymentIntent;
+  appointmentData: AppointmentType;
+  error: StripeError;
 };
 
-const PaymentResult: FC<PaymentResultProps> = () => {
-  //const { auth } = useContext(AuthContext);
-  const { data: userData } = useUserData();
-  const payment_intent = new URLSearchParams(window.location.search).get(
-    "payment_intent"
-  );
-  const redirect_status = new URLSearchParams(window.location.search).get(
-    "redirect_status"
-  );
+enum StatusChoice {
+  ERROR,
+  SUCCESS,
+  INFO,
+}
+type StatusType = {
+  type: StatusChoice;
+  bgColor: string;
+  iconColor: string;
+  title: string;
+  description: string;
+};
 
-  const [data, setData] = useState<PaymentResultProps>();
-  const [loading, setLoading] = useState(false);
+const PaymentResult2 = () => {
   const { state } = useLocation<LocationState>();
+  const { data: userData } = useUserData();
 
-  //console.log("auth", auth);
-  useEffect(() => {
-    if (redirect_status !== "succeeded" || state !== undefined) {
-      setData({
-        title: "Payment Failed",
-        description: state?.title,
-        resultType: PaymentResultType.ERROR,
+  const [status, setStatus] = useState<StatusType>({
+    type: StatusChoice.ERROR,
+    bgColor: "",
+    iconColor: "",
+    title: "",
+    description: "",
+  });
+  const init = async () => {
+    const paymentIntent = state.paymentIntentResult;
+
+    if (state.error !== undefined) {
+      setStatus({
+        type: StatusChoice.ERROR,
+        bgColor: "red.100",
+        iconColor: "red.800",
+        title: "Payment decline",
+        description: state.error.message || "",
       });
-    } else if (userData?.user !== undefined) {
-      checkPaymentStatus();
+    } else {
+      const x = await processStatus(paymentIntent.status);
+      if (x !== undefined) setStatus(x);
     }
-  }, [userData?.user]);
+  };
+  useEffect(() => {
+    if (
+      state === undefined ||
+      state.appointmentData === undefined ||
+      state.paymentIntentResult === undefined
+    ) {
+      setStatus({
+        type: StatusChoice.ERROR,
+        bgColor: "red.100",
+        iconColor: "red.800",
+        title: "Error occured",
+        description: "Something went wrong",
+      });
+    } else {
+      init();
+    }
+  }, []);
 
   const createAppointment = async (
     appointmentData: AppointmentType,
@@ -75,116 +89,107 @@ const PaymentResult: FC<PaymentResultProps> = () => {
         studentID: userData?.user.id.toString(),
       });
       console.log("updatedData", updatedData);
+      if (updatedData.data?.success) {
+        return {
+          type: StatusChoice.SUCCESS,
+          bgColor: "green.100",
+          iconColor: "green.800",
+          title: `Payment Success`,
+          description: "Appointment booked successfully",
+        };
+      } else {
+        return {
+          type: StatusChoice.ERROR,
+          bgColor: "red.200",
+          iconColor: "red.800",
+          title: "Payment Failed",
+          description: "Payment failed. Please try again",
+        };
+      }
+      // return updatedData.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error", error?.response?.data);
-        setData({
+        setStatus({
+          type: StatusChoice.ERROR,
+          bgColor: "red.100",
+          iconColor: "red.800",
           title: "Payment Failed",
-          description: error?.response?.data.message,
-          resultType: PaymentResultType.ERROR,
+          description: error?.response?.data.errorMessage || "",
         });
       } else {
-        setData({
+        setStatus({
+          type: StatusChoice.ERROR,
+          bgColor: "red.100",
+          iconColor: "red.800",
           title: "Payment Failed",
           description: "Error occured. Please try again",
-          resultType: PaymentResultType.ERROR,
         });
       }
     }
   };
 
-  const checkPaymentStatus = async () => {
-    const paymentStatusUrl = `/appointment/payment-status/${payment_intent}`;
-    try {
-      setLoading(true);
-      const response = await axiosClient.get(paymentStatusUrl);
-      console.log("response", response.data);
-      const paymentStatus = response.data.charges.data[0].status;
-      switch (paymentStatus) {
-        case "succeeded":
-          const appointmentData: AppointmentType = response.data.metadata;
+  const processStatus = async (status: PaymentIntent.Status) => {
+    switch (status) {
+      case "canceled":
+      case "requires_confirmation":
+      case "requires_payment_method":
+      case "requires_action":
+        return {
+          type: StatusChoice.ERROR,
+          bgColor: "red.100",
+          iconColor: "red.800",
+          title: "Payment decline",
+          description:
+            state.paymentIntentResult?.last_payment_error?.message || "",
+        };
 
-          createAppointment(appointmentData, response.data);
-          setData({
-            title: "Payment Success",
-            description: `Your appointment for ${appointmentData.title} has been booked successfully`,
-            resultType: PaymentResultType.SUCCESS,
-          });
-          break;
-        case "failed":
-          setData({
-            title: "Payment Failed",
-            description: response.data.charges.data[0].failure_message,
-            resultType: PaymentResultType.SUCCESS,
-          });
-          break;
-        case "processing":
-          //setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          // setMessage("Your payment was not successful, please try again.");
-          break;
-        default:
-          //setMessage("Something went wrong.");
-          break;
-      }
-    } catch (error) {
-      console.log("error", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const bgColor = (type: PaymentResultType | undefined) => {
-    switch (type) {
-      case "error":
-        return "red.100";
-      case "info":
-        return "blue.100";
+      case "processing":
+        return {
+          type: StatusChoice.INFO,
+          bgColor: "yellow.400",
+          iconColor: "yellow.800",
+          title: "Payment is Processing",
+          description: "Please be patient. Your payment is process.",
+        };
+      case "succeeded":
+        //const appointmentData: AppointmentType = state.paymentIntentResult?.;
+        return createAppointment(
+          state.appointmentData,
+          state.paymentIntentResult
+        );
+        return;
       default:
-        return "green.100";
-    }
-  };
-  const iconColor = (type: PaymentResultType | undefined) => {
-    switch (type) {
-      case "error":
-        return "red.800";
-      case "info":
-        return "blue.800";
-      default:
-        return "green.800";
+        return {
+          type: StatusChoice.INFO,
+          bgColor: "black",
+          iconColor: "grey",
+          title: "Something went wrong",
+          description: "Please try again.",
+        };
     }
   };
 
-  return loading || !userData?.user ? (
-    <Center>
-      <Spinner />
-    </Center>
-  ) : (
+  return (
     <Box textAlign="center" minH="80vh" py={10} px={6}>
       <Box display="inline-block">
         <Flex
           flexDirection="column"
           justifyContent="center"
           alignItems="center"
-          bg={bgColor(data?.resultType)}
+          bg={status.bgColor}
           rounded={"50px"}
           w={"55px"}
           h={"55px"}
           textAlign="center"
         >
-          <Icon
-            as={FcApproval}
-            color={iconColor(data?.resultType)}
-            w={8}
-            h={8}
-          />
+          <Icon as={FcApproval} color={status.iconColor} w={8} h={8} />
         </Flex>
       </Box>
       <Heading as="h2" size="xl" mt={6} mb={2}>
-        {data?.title}
+        {status.title}
       </Heading>
-      <Text color={"gray.700"}>{data?.description}</Text>
+      <Text color={"gray.700"}>{status.description}</Text>
 
       <Link as={ReactLink} to="/studentDashboard">
         <Button
@@ -204,4 +209,4 @@ const PaymentResult: FC<PaymentResultProps> = () => {
   );
 };
 
-export default PaymentResult;
+export default PaymentResult2;

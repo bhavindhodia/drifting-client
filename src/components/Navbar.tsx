@@ -1,12 +1,10 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import { Box, Flex, Link, Button, Stack } from "@chakra-ui/react";
 import Logo from "atoms/Logo";
 import { Link as ReactLink } from "react-router-dom";
 import { useIsAuthenticated } from "hooks";
-import { AuthContext, AuthContextType } from "services/AuthContext";
-import { useQueryClient } from "react-query";
-/* const Links = ["Dashboard", "Projects", "Team"];
- */
+import { AuthContextType } from "types";
+
 type NavbarType = {
   toggle: () => void;
   isOpen: boolean;
@@ -14,11 +12,9 @@ type NavbarType = {
 
 const NavBar: React.FC<{}> = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const queryClient = useQueryClient();
+
   const { data: auth, isError } = useIsAuthenticated();
-  if (isError) {
-    // queryClient.invalidateQueries("getisAuthenticated");
-  }
+
   const toggle = () => setIsOpen(!isOpen);
 
   return (
@@ -28,7 +24,6 @@ const NavBar: React.FC<{}> = (props) => {
       </Box>
       <MenuToggle toggle={toggle} isOpen={isOpen} />
       <MenuLinks isOpen={isOpen} authState={auth} />
-      {/* <MenuLinks isOpen={isOpen} authState={auth} /> */}
     </NavBarContainer>
   );
 };
@@ -101,7 +96,6 @@ const MenuLinks = ({
       >
         <MenuItem url="/">Home</MenuItem>
         <MenuItem url="/aboutus">About Us</MenuItem>
-        <MenuItem url="/blog">Blog </MenuItem>
         {/*   <MenuItem url={authState.redirectPath} isLast> */}
         <MenuItem
           url={

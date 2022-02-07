@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
-import { useIsAuthenticated, useUserData } from "hooks";
+import { useIsAuthenticated } from "hooks";
 import { Center } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
 import { axiosClient } from "services";
@@ -16,16 +16,12 @@ const PrivateRoute: FC<PrivateRouteProps> = ({
   isAuthenticated,
   ...rest
 }) => {
-  const { isLoading, data, status } = useIsAuthenticated();
-  /* console.log("PrivateRoute", data); */
+  const { isLoading, data } = useIsAuthenticated();
 
-  //  let isTokenAvaliable = false;
   if (data?.token !== undefined) {
     axiosClient.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${data.token}`;
-    ///  isTokenAvaliable = true;
-    //console.log("isTokenAvaliable data", data, status);
   }
 
   const isAuth = data?.token !== undefined || data?.success ? true : false;

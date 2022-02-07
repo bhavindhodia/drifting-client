@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Flex, Stack, Heading, Button, Text } from "@chakra-ui/react";
 
@@ -7,7 +6,7 @@ type HeroProps = {
   subtitle: string;
   buttonTxt: string;
 };
-export default ({ title, subtitle, buttonTxt }: HeroProps) => {
+const Hero = ({ title, subtitle, buttonTxt }: HeroProps) => {
   return (
     <Flex
       align="center"
@@ -61,3 +60,5 @@ export default ({ title, subtitle, buttonTxt }: HeroProps) => {
     </Flex>
   );
 };
+
+export default Hero;

@@ -5,17 +5,32 @@ import { Profile } from "components/";
 import Payments from "./Payments";
 import TeacherAppointments from "./TeacherAppointments";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import Meeting, { TeacherMeeting } from "pages/StudentDashboard/Meeting";
+import { Route, Redirect } from "react-router-dom";
+import Meeting from "pages/StudentDashboard/Meeting";
 
 const TeacherDashboard = () => {
-  const { isLoading, data } = useIsAuthenticated();
-  // const history = useHistory();
+  const { data } = useIsAuthenticated();
+  const myRole = data?.role ? data.role.toString() : "";
+
+  return myRole !== "TEACHER" ? (
+    <Redirect to={`/${myRole.toLowerCase().concat("Dashboard")}`} />
+  ) : (
+    <Route
+      path="/teacherDashboard"
+      render={({ match: { url } }) => (
+        <Sidebar>
+          <Route path={`${url}/`} component={BasicStatistics} exact />
+          <Route path={`${url}/appointment`} component={TeacherAppointments} />
+          <Route path={`${url}/profile`} component={Profile} />
+          <Route path={`${url}/payments`} component={Payments} />
+          <Route path={`${url}/meeting`} component={Meeting} />
+        </Sidebar>
+      )}
+    />
+  );
+};
+/* const TeacherDashboard = () => {
+  const { data } = useIsAuthenticated();
   const myRole = data?.role ? data.role.toString() : "";
 
   return myRole !== "TEACHER" ? (
@@ -25,7 +40,6 @@ const TeacherDashboard = () => {
       <Sidebar>
         <Switch>
           <Route exact path="/teacherDashboard" component={BasicStatistics} />
-          {/*   <Redirect to="/home" /> */}
           <Route exact path="/home" render={() => <Redirect to="/home" />} />
           <Route
             exact
@@ -39,6 +53,6 @@ const TeacherDashboard = () => {
       </Sidebar>
     </Router>
   );
-};
+}; */
 
 export default TeacherDashboard;

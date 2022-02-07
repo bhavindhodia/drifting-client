@@ -26,7 +26,6 @@ import {
 } from "@chakra-ui/react";
 import {
   FiHome,
-  FiCompass,
   FiMenu,
   FiBell,
   FiUser,
@@ -227,7 +226,7 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const { isLoading: userDataLoading, data: userData } = useUserData();
+  const { data: userData } = useUserData();
   const logoutMutation = useLogout();
   return (
     <Flex

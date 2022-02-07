@@ -1,8 +1,7 @@
 import { FC } from "react";
 import globalData from "data/globalData.json";
 import { Heading, HeadingProps, Box } from "@chakra-ui/layout";
-/* import { Link } from "@chakra-ui/react"; */
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 type Props = {
   titleProps?: HeadingProps;
   iconWidth?: number;
@@ -19,6 +18,7 @@ const Logo: FC<Props> = (props) => {
       justifyContent={"space-around"}
       alignItems={"center"}
       onClick={redirectHome}
+      //onClick={<Redirect to="/" />}
     >
       <svg
         width={props.iconWidth ? props.iconWidth : 50}
@@ -70,7 +70,12 @@ const Logo: FC<Props> = (props) => {
           </clipPath>
         </defs>
       </svg>
-      <Heading size="lg" fontWeight="bold" {...props.titleProps}>
+      <Heading
+        cursor={"pointer"}
+        size="lg"
+        fontWeight="bold"
+        {...props.titleProps}
+      >
         {globalData.appName}
       </Heading>
     </Box>

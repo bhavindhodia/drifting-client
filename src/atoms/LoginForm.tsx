@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import {
   FormControl,
   FormLabel,
@@ -8,16 +7,13 @@ import {
   Input,
   Button,
   Link,
-  Alert,
-  AlertIcon,
   Text,
 } from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link as ReactLink } from "react-router-dom";
-import { useAuth, useLogin } from "hooks";
-import { AuthContext } from "services/AuthContext";
+import { useLogin } from "hooks";
 
 const schema = yup.object().shape({
   email: yup
@@ -36,10 +32,7 @@ export type LoginFormInputs = {
 };
 
 const LoginForm = () => {
-  //const { loginUser, authError, authLoading } = useAuth();
   const loginMutate = useLogin();
-  /*   const { auth } = useContext(AuthContext);
-  console.log("Auth", auth); */
 
   const { register, handleSubmit, formState } = useForm<LoginFormInputs>({
     mode: "onBlur",
@@ -52,13 +45,6 @@ const LoginForm = () => {
 
   return (
     <>
-      {/*  {loginMutate.isError !== "" && (
-        <Alert status="error">
-          {" "}
-          <AlertIcon />
-          {login}{" "}
-        </Alert>
-      )} */}
       <FormControl
         isInvalid={!!formState.errors?.email?.message}
         errortext={formState.errors?.email?.message}

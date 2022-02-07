@@ -1,6 +1,6 @@
 import { axiosClient } from "services";
 import { useQuery } from "react-query";
-import { MeetCardType } from "atoms/MeetCard";
+import { MeetCardType } from "types";
 
 /* TEACHER : Get Meetings */
 const getMeets = async () => {

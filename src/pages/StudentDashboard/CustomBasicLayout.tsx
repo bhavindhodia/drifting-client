@@ -20,8 +20,6 @@ const CustomBasicLayout: ComponentType<AppointmentForm.BasicLayoutProps> = ({
   ...restprop
 }) => {
   const history = useHistory();
-  //const { auth } = useContext(AuthContext);
-
   const { data: userData } = useUserData();
 
   const appointmentStart = new Date(appointmentData.startDate).toLocaleString();

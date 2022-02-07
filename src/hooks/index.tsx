@@ -1,4 +1,3 @@
-import useAuth from "./useAuth";
 import useFindUser from "./useFindUser";
 
 import {
@@ -16,13 +15,12 @@ import {
   useLogout,
   useProfileUpdate,
   useResetPassword,
-} from "./useAuth2";
+} from "./useAuth";
 
 import { usePaymentIntent } from "./usePayment";
 import { useGetMeet } from "./useMeetings";
 import { useAppointmentStats } from "./useStats";
 export {
-  useAuth,
   useFindUser,
   useGetAppointment,
   usePostAppointment,

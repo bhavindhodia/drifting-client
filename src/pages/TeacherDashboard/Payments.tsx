@@ -16,8 +16,6 @@ import { Tag, TagRightIcon } from "@chakra-ui/tag";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { IconType } from "react-icons";
 import { MyPaymentIntent } from "types";
-import { navigateToExternalUrl } from "utils";
-
 import { Icon } from "@chakra-ui/icon";
 import { FcMoneyTransfer } from "react-icons/fc";
 import { BiCheckDouble, BiLoader } from "react-icons/bi";
@@ -65,8 +63,7 @@ const Payments = () => {
             case "succeeded":
               tagColor = "green";
               break;
-            case "processing":
-
+            /* falls through */
             case "requires_capture":
             case "requires_confirmation":
             case "requires_payment_method":

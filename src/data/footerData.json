@@ -1,0 +1,36 @@
+{
+   "Social Links":[{
+        "title":"Facebook",
+        "link":"https://facebook.com"
+    },
+    {
+        "title":"Twitter",
+        "link":"https://twitter.com"
+    },
+    {
+        "title":"Instagram",
+        "link":"https://instagram.com"
+    },
+    {
+        "title":"Youtube",
+        "link":"https://youtube.com"
+    }
+],
+   "Links":[{
+        "title":"Dashboard",
+        "link":"http://facebook.com"
+    },
+    {
+        "title":"Login",
+        "link":"https://twitter.com"
+    },
+    {
+        "title":"Signup",
+        "link":"https://instagram.com"
+    },
+    {
+        "title":"About Us",
+        "link":"https://youtube.com"
+    }
+]
+}

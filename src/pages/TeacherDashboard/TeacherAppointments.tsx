@@ -1,4 +1,4 @@
-import { useState, ComponentType, useCallback } from "react";
+import { useState, ComponentType } from "react";
 import {
   ViewState,
   EditingState,
@@ -80,7 +80,7 @@ const TeacherAppointments = () => {
     viewName: "Week",
     currentDate: new Date(),
   });
-  const { data, error, isLoading, isFetching } = useGetAppointment(
+  const { data, isLoading, isFetching } = useGetAppointment(
     currentState.viewName,
     currentState.currentDate
   );

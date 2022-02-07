@@ -1,8 +1,7 @@
-import { FC, ComponentType, ReactElement, ReactComponentElement } from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 
 import { useIsAuthenticated } from "hooks";
-import { Center } from "@chakra-ui/layout";
+import { Center, Heading } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
 
 export type PrivateRouteProps = {
@@ -25,11 +24,7 @@ const PublicRoute = ({
 
   const isAuth = data?.token !== undefined ? true : false;
 
-  return isLoading ? (
-    <Center h={"100vh"}>
-      <Spinner />
-    </Center>
-  ) : (
+  return (
     <Route
       {...rest}
       render={({ location }) =>

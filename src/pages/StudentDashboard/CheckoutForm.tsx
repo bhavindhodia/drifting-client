@@ -1,17 +1,11 @@
-import React, { useState, FC, useContext } from "react";
-import {
-  PaymentElement,
-  useStripe,
-  useElements,
-  CardElement,
-} from "@stripe/react-stripe-js";
+import React, { useState } from "react";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import {
   PaymentIntent,
   StripeCardElementChangeEvent,
   StripeElementChangeEvent,
-  StripeError,
 } from "@stripe/stripe-js";
-import { Box, Stack, VStack, Heading, Text, Center } from "@chakra-ui/layout";
+import { Box, Stack, VStack, Text, Center } from "@chakra-ui/layout";
 import { Image } from "@chakra-ui/image";
 import { Button } from "@chakra-ui/button";
 import { Spinner } from "@chakra-ui/spinner";
@@ -19,10 +13,9 @@ import { Input } from "@chakra-ui/input";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import { GiWallet } from "react-icons/gi";
 import { toast } from "react-toastify";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
 import { showMyToast } from "atoms";
-const toastID = "Payment Page";
 
 const CARD_OPTIONS = {
   //iconStyle: StripeCardElement ,

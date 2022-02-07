@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Heading, Text, Box } from "@chakra-ui/layout";
+import { Flex, Heading, Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 
 const Booking = ({

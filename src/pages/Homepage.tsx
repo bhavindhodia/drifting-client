@@ -8,7 +8,7 @@ import {
 } from "components";
 import { Box } from "@chakra-ui/layout";
 import "./pages.style.css";
-import homeData from "components/Homepage/homeData.json";
+import homeData from "../data/homeData.json";
 
 const Homepage = () => {
   return (

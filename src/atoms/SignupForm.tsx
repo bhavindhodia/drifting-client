@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -16,10 +16,8 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link as ReactLink } from "react-router-dom";
-import { AuthContext, AuthContextType } from "services/AuthContext";
 
-import axios from "axios";
-import { useRegister } from "hooks/useAuth2";
+import { useRegister } from "hooks/useAuth";
 const schema = yup.object().shape({
   name: yup
     .string()
@@ -59,35 +57,12 @@ export default ({ title }: { title: string }) => {
   });
 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { auth, setAuth } = useContext(AuthContext);
   const registerMutate = useRegister();
-  /*  const onSubmit = async (values: SignupFormInputs) => {
-    console.log(values);
-    setLoading(true);
-    const singupURL = "/auth/signup/";
-
-    try {
-      const res = await axios.post(singupURL, values);
-
-      setAuth((i: AuthContextType) => {
-        return { ...i, token: res.data.token };
-      });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        error.response?.status === 400
-          ? setError("Please fill all the fields correctly!")
-          : setError("Invalid email and password combination.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }; */
 
   const onSubmit = async (values: SignupFormInputs) => {
     registerMutate.mutate(values);
   };
-  //console.log("res", auth);
+
   return (
     <>
       {error !== "" && (

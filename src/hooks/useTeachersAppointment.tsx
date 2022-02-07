@@ -1,9 +1,6 @@
-import { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import axios from "axios";
 import { axiosClient } from "services";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
-import { AuthContext } from "services/AuthContext";
 import { useToast, UseToastOptions, ToastId } from "@chakra-ui/react";
 
 const appointmentUrl = "/appointment/";

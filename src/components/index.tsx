@@ -8,6 +8,8 @@ import Tips from "./Homepage/Tips";
 import Footer from "./Footer";
 import Profile from "./Profile";
 
+import AuthLayout from "./AuthLayout";
+
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import ProtectedRoutes from "./ProtectedRoutes";
@@ -24,4 +26,5 @@ export {
   PrivateRoute,
   ProtectedRoutes,
   Profile,
+  AuthLayout,
 };

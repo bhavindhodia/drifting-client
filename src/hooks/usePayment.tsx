@@ -1,12 +1,11 @@
 import axios from "axios";
 import { axiosClient } from "services";
 import { useQuery, useMutation } from "react-query";
-import { useHistory } from "react-router-dom";
 import { showToast, showMyToast } from "atoms";
 import { useToast } from "@chakra-ui/toast";
-import { UserDataType } from "services/AuthContext";
+import { UserDataType } from "types";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
-import { PaymentIntent, PaymentIntentResult } from "@stripe/stripe-js";
+import { PaymentIntent } from "@stripe/stripe-js";
 
 /* Base URL */
 const baseURL = "payment";
@@ -18,17 +17,10 @@ const createIntent = async (
   appointmentData: AppointmentModel
 ) => {
   const createIntetnUrl = `/${baseURL}/create-payment-intent/`;
-  const response = await axiosClient.post<any>(
-    createIntetnUrl,
-    {
-      userData,
-      appointmentData,
-    }
-    /*    {
-      timeout: 5,
-      timeoutErrorMessage: "Connection error occured",
-    } */
-  );
+  const response = await axiosClient.post<any>(createIntetnUrl, {
+    userData,
+    appointmentData,
+  });
   return response.data;
 };
 

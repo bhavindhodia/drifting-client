@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext, FC } from "react";
+import { useEffect, FC } from "react";
 import {
   loadStripe,
   StripeElementsOptions,
   Appearance,
-  PaymentIntentResult,
 } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
@@ -13,7 +12,6 @@ import { Center } from "@chakra-ui/layout";
 import { Redirect, useLocation } from "react-router-dom";
 import { AppointmentModel } from "@devexpress/dx-react-scheduler";
 import { usePaymentIntent, useUserData } from "hooks";
-import { usePublishableKey } from "hooks/usePayment";
 import { axiosClient } from "services";
 import { AxiosResponse } from "axios";
 
@@ -22,9 +20,6 @@ const stripePromise = axiosClient
   .then((response: AxiosResponse<{ success: boolean; pKey: string }, Error>) =>
     loadStripe(response.data.pKey)
   );
-/* const stripePromise = loadStripe(
-  "pk_test_51KMEcKATulpGYXk79afZReVLyPX0nOzbj2B0Y0YsT6AbSvGLCWSFHuNaekovKFDUR0Rl5SyzMcNoEU0gP2TT7ib700yaFdTQ04"
-); */
 
 const Checkout: FC = () => {
   const { data: userData } = useUserData();
@@ -54,9 +49,7 @@ const Checkout: FC = () => {
     appearance,
     fonts: [{ cssSrc: "https://fonts.googleapis.com/css?family=Poppins:400" }],
   };
-  const fonts = [
-    { cssSrc: "https://fonts.googleapis.com/css?family=Podkova:400" },
-  ];
+
   return (
     <div>
       {paymentIntentMutate.isLoading ? (

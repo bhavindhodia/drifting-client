@@ -1,7 +1,7 @@
 import { Heading, Stack, Flex } from "@chakra-ui/layout";
 import ProvideCard from "atoms/ProvideCard";
 import { ProvideCardProps } from "atoms/ProvideCard";
-export default (props: { headingTitle: string; data: ProvideCardProps[] }) => {
+const Provide = (props: { headingTitle: string; data: ProvideCardProps[] }) => {
   return (
     <Flex
       align="center"
@@ -28,3 +28,4 @@ export default (props: { headingTitle: string; data: ProvideCardProps[] }) => {
     </Flex>
   );
 };
+export default Provide;

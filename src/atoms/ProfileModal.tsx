@@ -18,7 +18,7 @@ import { useProfileUpdate } from "hooks";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { UserDataType } from "hooks/useAuth2";
+import { UserDataType } from "hooks/useAuth";
 
 type ProfileModalType = {
   userData:

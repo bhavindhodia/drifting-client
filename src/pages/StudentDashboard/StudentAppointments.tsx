@@ -1,4 +1,4 @@
-import { useState, ComponentType, useContext } from "react";
+import { useState, ComponentType } from "react";
 import {
   ViewState,
   EditingState,
@@ -43,7 +43,6 @@ const Appointment: ComponentType<Appointments.AppointmentProps> = ({
   data,
   ...restProps
 }) => {
-  //  const { auth } = useContext(AuthContext);
   const { data: userData } = useUserData();
   const readOnly = data?.studentID.find(
     (item: { name: string; _id: string }) => item._id === userData?.user.id
