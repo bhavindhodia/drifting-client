@@ -1,6 +1,8 @@
 import React from "react";
-import { Flex, Heading, Box } from "@chakra-ui/layout";
+import { Flex, Heading, Box, Link } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
+
+import { Link as ReactLink } from "react-router-dom";
 
 const Booking = ({
   bookingTitle,
@@ -28,9 +30,11 @@ const Booking = ({
           {subtitle}
         </Heading>
       </Box>
-      <Button variant="solid" size="lg">
-        {btnTxt}
-      </Button>
+      <Link as={ReactLink} to="/login">
+        <Button variant="solid" size="lg">
+          {btnTxt}
+        </Button>
+      </Link>
     </Flex>
   );
 };

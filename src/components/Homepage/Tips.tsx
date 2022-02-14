@@ -1,6 +1,8 @@
-import { VStack, Heading, Text, SimpleGrid } from "@chakra-ui/layout";
+import { VStack, Heading, Text, SimpleGrid, Link } from "@chakra-ui/layout";
 import { Image } from "@chakra-ui/image";
 import { Button } from "@chakra-ui/button";
+import { Link as ReactLink } from "react-router-dom";
+
 type TipsProps = {
   title: string;
   subtitle: string;
@@ -20,14 +22,16 @@ const Tips = (props: { tipsData: TipsProps }) => {
       <VStack py={16}>
         <Heading>{props.tipsData.title}</Heading>
         <Text>{props.tipsData.subtitle}</Text>
-        <Button
-          variant="gradiant"
-          size="lg"
-          colorScheme={"success"}
-          bgGradient="linear-gradient(to right, #13f066, #38ef7d);"
-        >
-          {props.tipsData.btnTxt}
-        </Button>
+        <Link as={ReactLink} to="/aboutus">
+          <Button
+            variant="gradiant"
+            size="lg"
+            colorScheme={"success"}
+            bgGradient="linear-gradient(to right, #13f066, #38ef7d);"
+          >
+            {props.tipsData.btnTxt}
+          </Button>
+        </Link>
       </VStack>
       <Image
         w="80%"

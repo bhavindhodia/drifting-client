@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { Flex, Stack, Heading, Button, Text } from "@chakra-ui/react";
+import { Flex, Stack, Heading, Button, Text, Link } from "@chakra-ui/react";
+import { Link as ReactLink } from "react-router-dom";
 
 type HeroProps = {
   title: string;
@@ -16,7 +16,8 @@ const Hero = ({ title, subtitle, buttonTxt }: HeroProps) => {
       w="100%"
       minH="100vh"
       px={8}
-      mb={8}
+      mb={2}
+      pr={8}
     >
       <Stack
         spacing={4}
@@ -44,7 +45,7 @@ const Hero = ({ title, subtitle, buttonTxt }: HeroProps) => {
         >
           {subtitle}
         </Text>
-        <Link to="/signup">
+        <Link as={ReactLink} to="/login">
           <Button
             colorScheme="primary"
             borderRadius="8px"

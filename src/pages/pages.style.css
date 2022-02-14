@@ -6,11 +6,21 @@
   background-size: contain;
 }
 
+@media screen and (max-width: 2000px) {
+  .homepage-main {
+    background-size: 60% auto;
+  }
+}
 @media screen and (max-width: 1277px) {
   .homepage-main {
     background-size: 75% auto;
   }
 }
+/* @media screen and (max-width: 900px) {
+  .homepage-main {
+    background-image: none;
+  }
+} */
 
 @media screen and (max-width: 767px) {
   .homepage-main {
