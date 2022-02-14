@@ -76,7 +76,7 @@ const ProfileModal = ({ userData, isOpen, onClose }: ProfileModalType) => {
         <ModalBody>
           <FormControl
             isInvalid={!!formState.errors?.name?.message}
-            errortext={formState.errors?.name?.message}
+            //  errortext={formState.errors?.name?.message}
             my="6"
             isRequired
           >
@@ -93,7 +93,7 @@ const ProfileModal = ({ userData, isOpen, onClose }: ProfileModalType) => {
           </FormControl>
           <FormControl
             isInvalid={!!formState.errors?.username?.message}
-            errortext={formState.errors?.username?.message}
+            //   errortext={formState.errors?.username?.message}
             my="6"
             isRequired
           >
@@ -110,7 +110,7 @@ const ProfileModal = ({ userData, isOpen, onClose }: ProfileModalType) => {
           </FormControl>
           <FormControl
             isInvalid={!!formState.errors?.email?.message}
-            errortext={formState.errors?.email?.message}
+            //  errortext={formState.errors?.email?.message}
             my="6"
             isRequired
           >

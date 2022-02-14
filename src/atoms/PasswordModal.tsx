@@ -73,7 +73,7 @@ const PasswordModal = ({ userData, isOpen, onClose }: ProfileModalType) => {
         <ModalBody>
           <FormControl
             isInvalid={!!formState.errors?.currentPassword?.message}
-            errortext={formState.errors?.currentPassword?.message}
+            //  errortext={formState.errors?.currentPassword?.message}
             my="6"
             isRequired
           >
@@ -90,7 +90,7 @@ const PasswordModal = ({ userData, isOpen, onClose }: ProfileModalType) => {
           </FormControl>
           <FormControl
             isInvalid={!!formState.errors?.newPassword?.message}
-            errortext={formState.errors?.newPassword?.message}
+            //  errortext={formState.errors?.newPassword?.message}
             my="6"
             isRequired
           >
@@ -107,7 +107,7 @@ const PasswordModal = ({ userData, isOpen, onClose }: ProfileModalType) => {
           </FormControl>
           <FormControl
             isInvalid={!!formState.errors?.confirmPassword?.message}
-            errortext={formState.errors?.confirmPassword?.message}
+            //  errortext={formState.errors?.confirmPassword?.message}
             my="6"
             isRequired
           >

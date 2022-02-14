@@ -76,7 +76,7 @@ export default ({ title }: { title: string }) => {
 
       <FormControl
         isInvalid={!!formState.errors?.name?.message}
-        errortext={formState.errors?.name?.message}
+        //errortext={formState.errors?.name?.message}
         my="6"
         isRequired
       >
@@ -91,7 +91,7 @@ export default ({ title }: { title: string }) => {
       </FormControl>
       <FormControl
         isInvalid={!!formState.errors?.username?.message}
-        errortext={formState.errors?.username?.message}
+        //errortext={formState.errors?.username?.message}
         my="6"
         isRequired
       >
@@ -108,7 +108,7 @@ export default ({ title }: { title: string }) => {
       </FormControl>
       <FormControl
         isInvalid={!!formState.errors?.email?.message}
-        errortext={formState.errors?.email?.message}
+        //errortext={formState.errors?.email?.message}
         my="6"
         isRequired
       >
@@ -124,7 +124,7 @@ export default ({ title }: { title: string }) => {
 
       <FormControl
         isInvalid={!!formState.errors?.password?.message}
-        errortext={formState.errors?.password?.message}
+        //errortext={formState.errors?.password?.message}
         my="6"
         isRequired
       >
@@ -141,7 +141,7 @@ export default ({ title }: { title: string }) => {
       </FormControl>
       <FormControl
         isInvalid={!!formState.errors?.confirmPassword?.message}
-        errortext={formState.errors?.confirmPassword?.message}
+        //errortext={formState.errors?.confirmPassword?.message}
         my="6"
         isRequired
       >

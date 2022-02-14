@@ -47,7 +47,7 @@ const LoginForm = () => {
     <>
       <FormControl
         isInvalid={!!formState.errors?.email?.message}
-        errortext={formState.errors?.email?.message}
+        //errortext={formState.errors?.email?.message}
         my="6"
         isRequired
       >
@@ -62,7 +62,7 @@ const LoginForm = () => {
       </FormControl>
       <FormControl
         isInvalid={!!formState.errors?.password?.message}
-        errortext={formState.errors?.password?.message}
+        //  errortext={formState.errors?.password?.message}
         my="6"
         isRequired
       >
