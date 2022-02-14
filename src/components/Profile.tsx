@@ -51,7 +51,7 @@ const Profile = () => {
         <Avatar
           size={"xl"}
           name={userData?.user.name}
-          alt={"Avatar Alt"}
+          //alt={"Avatar Alt"}
           mb={4}
           pos={"relative"}
           _after={{
