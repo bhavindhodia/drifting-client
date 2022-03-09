@@ -28,6 +28,7 @@ export type AppointmentType = {
   startDate: Date;
   endDate: Date;
   readOnly: boolean;
+  price: number;
 };
 
 type AppointmentPayload = {

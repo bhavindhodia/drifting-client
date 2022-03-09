@@ -59,7 +59,24 @@ const PaymentResult2 = () => {
     }
   };
   useEffect(() => {
+    console.log("appointment", state.appointmentData);
     if (
+      state !== undefined &&
+      state.appointmentData !== undefined &&
+      state.paymentIntentResult === undefined
+    ) {
+      if (state.appointmentData.price === 0) {
+        createFreeAppointment(state.appointmentData);
+      } else {
+        setStatus({
+          type: StatusChoice.ERROR,
+          bgColor: "red.100",
+          iconColor: "red.800",
+          title: "Error Occured",
+          description: "Meeting should be free to book",
+        });
+      }
+    } else if (
       state === undefined ||
       state.appointmentData === undefined ||
       state.paymentIntentResult === undefined
@@ -75,6 +92,55 @@ const PaymentResult2 = () => {
       init();
     }
   }, []);
+
+  const createFreeAppointment = async (appointmentData: AppointmentType) => {
+    const studentUpdate = "/appointment/studentUpdateNP";
+    console.log("auth?.userData?.id,", userData?.user?.id);
+    try {
+      const updatedData = await axiosClient.post(studentUpdate, {
+        appointmentData,
+        studentID: userData?.user.id.toString(),
+      });
+      console.log("updatedData", updatedData);
+      if (updatedData.data?.success) {
+        setStatus({
+          type: StatusChoice.SUCCESS,
+          bgColor: "green.100",
+          iconColor: "green.800",
+          title: `Success`,
+          description: "Appointment booked successfully",
+        });
+      } else {
+        setStatus({
+          type: StatusChoice.ERROR,
+          bgColor: "red.200",
+          iconColor: "red.800",
+          title: "Failed to book",
+          description: "Payment failed. Please try again",
+        });
+      }
+      // return updatedData.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error", error?.response?.data);
+        setStatus({
+          type: StatusChoice.ERROR,
+          bgColor: "red.100",
+          iconColor: "red.800",
+          title: "Booking Failed",
+          description: error?.response?.data.errorMessage || "",
+        });
+      } else {
+        setStatus({
+          type: StatusChoice.ERROR,
+          bgColor: "red.100",
+          iconColor: "red.800",
+          title: "Booking Failed",
+          description: "Error occured. Please try again",
+        });
+      }
+    }
+  };
 
   const createAppointment = async (
     appointmentData: AppointmentType,

@@ -2,7 +2,7 @@ import { ComponentType, useContext } from "react";
 import { List, ListIcon, ListItem } from "@chakra-ui/layout";
 import { AiOutlineUser } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
-import { useUserData } from "hooks";
+import { useUpdateAppointment, useUserData } from "hooks";
 import {
   chakra,
   Box,
@@ -29,10 +29,17 @@ const CustomBasicLayout: ComponentType<AppointmentForm.BasicLayoutProps> = ({
   );
 
   const onCheckout = (appointmentData: AppointmentModel) => {
-    history.push({
-      pathname: "/studentDashboard/checkout",
-      state: { appointmentData },
-    });
+    if (appointmentData.price === 0) {
+      history.push({
+        pathname: "/studentDashboard/payment-status",
+        state: { appointmentData },
+      });
+    } else {
+      history.push({
+        pathname: "/studentDashboard/checkout",
+        state: { appointmentData },
+      });
+    }
   };
   const openMeet = (appointmentData: AppointmentModel) => {
     window.open(appointmentData?.meetID?.join_url, "_blank");
@@ -67,7 +74,7 @@ const CustomBasicLayout: ComponentType<AppointmentForm.BasicLayoutProps> = ({
               fontWeight={["bold", "extrabold"]}
               lineHeight="tight"
             >
-              $2
+              $ {appointmentData?.price}
               <chakra.span
                 fontSize="2xl"
                 fontWeight="medium"

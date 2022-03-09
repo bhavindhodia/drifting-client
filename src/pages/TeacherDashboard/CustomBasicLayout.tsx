@@ -17,8 +17,11 @@ const CustomBasicLayout: ComponentType<AppointmentForm.BasicLayoutProps> = ({
   children,
   ...restProps
 }) => {
-  const onCustomFieldChange = (nextValue: string) => {
+  const onLimitChange = (nextValue: string) => {
     onFieldChange({ meetLimit: parseInt(nextValue) });
+  };
+  const onPriceChange = (nextValue: string) => {
+    onFieldChange({ price: parseInt(nextValue) });
   };
 
   console.log("appointmentData", appointmentData);
@@ -35,8 +38,16 @@ const CustomBasicLayout: ComponentType<AppointmentForm.BasicLayoutProps> = ({
         value={appointmentData?.meetLimit}
         type="numberEditor"
         readOnly={false}
-        onValueChange={onCustomFieldChange}
+        onValueChange={onLimitChange}
         placeholder="Limit"
+      />
+      <AppointmentForm.Label text="Price" type="ordinaryLabel" />
+      <AppointmentForm.TextEditor
+        value={appointmentData?.price}
+        type="numberEditor"
+        readOnly={false}
+        onValueChange={onPriceChange}
+        placeholder="Price"
       />
 
       <AppointmentForm.Label

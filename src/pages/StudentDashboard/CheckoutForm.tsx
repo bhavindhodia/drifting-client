@@ -196,6 +196,12 @@ const CheckoutForm = ({
               {cardEvent?.error.message}
             </Text>
           )}
+          {/* For Demo Payment */}
+          {/* <Box my="1.5rem">
+            <Text mt="2" color={"primary.500"}>
+              Card Number : 4242424242424242
+            </Text>
+          </Box> */}
           <Box my="1.5rem">
             <Button
               id="submit"
