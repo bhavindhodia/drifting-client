@@ -10,8 +10,8 @@ const productionBaseURL =
 axiosClient.defaults.baseURL =
   process.env.NODE_ENV === "development"
     ? developmentBaseURL
-    : process.env.REACT_PRODUCTION_URL !== undefined
-    ? process.env.REACT_PRODUCTION_URL
+    : process.env.REACT_APP_PRODUCTION_URL !== undefined
+    ? process.env.REACT_APP_PRODUCTION_URL
     : productionBaseURL;
 axiosClient.defaults.withCredentials = true;
 
