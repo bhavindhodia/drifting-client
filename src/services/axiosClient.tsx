@@ -12,7 +12,7 @@ const productionBaseURL =
 axiosClient.defaults.baseURL =
   process.env.NODE_ENV === "development"
     ? developmentBaseURL
-    : productionBaseURL;
+    : process.env.REACT_APP_PRODUCTION_URL;
 axiosClient.defaults.withCredentials = true;
 
 //All request will wait 2 seconds before timeout

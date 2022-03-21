@@ -4,5 +4,11 @@ module.exports = (env, options) => ({
       src: path.resolve(__dirname, 'src/') // added this
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+  },
+  output: {
+    path:path.resolve(__dirname, "dist"),
+  },
+  devServer:{
+    historyApiFallback:true
   }
 })
