@@ -77,9 +77,7 @@ const LoginForm = () => {
           {formState.errors?.password?.message}
         </FormErrorMessage>
       </FormControl>
-      <Stack spacing={6} textAlign="right">
-        <Link color={"primary.500"}>Forgot password?</Link>
-      </Stack>
+
       <Button
         onClick={handleSubmit(onSubmit)}
         mt="6"

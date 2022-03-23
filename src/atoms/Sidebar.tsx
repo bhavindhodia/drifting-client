@@ -98,12 +98,6 @@ const LinkItems: Array<LinkItemProps> = [
     url: "/teacherDashboard/meeting",
     role: "TEACHER",
   },
-  {
-    name: "Settings",
-    icon: FiSettings,
-    url: "/teacherDashboard/appointment",
-    role: "TEACHER",
-  },
 ];
 
 export default function Sidebar({ children }: { children: ReactNode }) {
@@ -301,10 +295,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-
-              <MenuDivider />
+              {/*         <MenuDivider /> */}
               {/*  <MenuItem onClick={logoutUser}>Sign out</MenuItem> */}
               {
                 <MenuItem onClick={() => logoutMutation.mutate()}>
