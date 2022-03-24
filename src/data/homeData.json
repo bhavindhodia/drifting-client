@@ -26,17 +26,17 @@
     "provide":[{
             "title":"Step 1",
             "subtitle":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "imgName":"p1"  
+            "imgName":"provide1"  
     },
     {
             "title":"Step 2",
             "subtitle":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "imgName":"p2"  
+            "imgName":"provide2"  
     },
  {
             "title":"Step 3",
             "subtitle":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "imgName":"p3"  
+            "imgName":"provide3"  
     }
 ],
 "bookingTitle":"Book a round !",
