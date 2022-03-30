@@ -90,12 +90,12 @@ const LoginForm = () => {
         Login
       </Button>
       {/* For Demo Login */}
-      {/* <Text mt="2" color={"primary.500"}>
+      <Text mt="2" color={"primary.500"}>
         Teachers Email : teacher1@gmail.com
       </Text>
       <Text color={"primary.500"}>Teachers Password : 12345678</Text>
       <Text color={"primary.500"}>Student Login : student1@gmail.com</Text>
-      <Text color={"primary.500"}>Student Password : 12345678</Text> */}
+      <Text color={"primary.500"}>Student Password : 12345678</Text>
       <HStack justifyContent="center">
         <Text color={"primary.500"}> New user ?</Text>{" "}
         <Link as={ReactLink} to="/register" color={"primary.700"}>
