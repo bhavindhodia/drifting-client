@@ -154,8 +154,8 @@ const TeacherAppointments = () => {
           onCurrentViewNameChange={setCurrentViewName}
         />
         <MonthView />
-        <WeekView startDayHour={8} endDayHour={13} />
-        <DayView startDayHour={8} endDayHour={13} />
+        <WeekView startDayHour={8} endDayHour={19} />
+        <DayView startDayHour={8} endDayHour={19} />
         <EditingState onCommitChanges={commitChanges} />
         <IntegratedEditing />
         <Toolbar

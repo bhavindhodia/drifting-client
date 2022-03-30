@@ -130,10 +130,10 @@ const TeacherAppointments = () => {
         <MonthView />
         <WeekView
           startDayHour={8}
-          endDayHour={13}
+          endDayHour={19}
           timeTableCellComponent={TimeTableCell}
         />
-        <DayView startDayHour={8} endDayHour={13} />
+        <DayView startDayHour={8} endDayHour={19} />
         <EditingState onCommitChanges={commitChanges} />
         <IntegratedEditing />
         <Toolbar
